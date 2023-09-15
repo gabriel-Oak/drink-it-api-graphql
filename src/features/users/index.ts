@@ -1,3 +1,4 @@
+import './datasources';
 import './usecases';
 import UserResolver from './resolvers/user-resolver';
 

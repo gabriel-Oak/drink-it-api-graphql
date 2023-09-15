@@ -37,6 +37,7 @@
         "import/no-extraneous-dependencies": "off",
         "function-paren-newline": "off",
         "no-useless-constructor": "off",
-        "no-empty-function": "off"
+        "no-empty-function": "off",
+        "max-classes-per-file": "off"
     }
 }

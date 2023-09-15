@@ -1,18 +1,23 @@
 import winston, { Logger } from 'winston';
+import { inject } from 'inversify';
 import { ILoggerService } from './types';
+import Injectable from '../../decorators/injectable';
 
+@Injectable('ILoggerService')
 export default class LoggerService implements ILoggerService {
-  constructor(private readonly logger: Logger) {
+  constructor(
+    @inject('Logger') private readonly logger: Logger,
+  ) {
     if (process.env.NODE_ENV !== 'production') {
-      this.logger.add(new winston.transports.Console({
+      logger.add(new winston.transports.Console({
         format: this.format,
       }));
     }
   }
 
   protected format = winston.format.printf(({ level, message }) => `${new Date().toLocaleString('pt-BR')} [${level.toUpperCase()}]: ${message.message
-      || message.error
-      || message}`);
+    || message.error
+    || message}`);
 
   info(message: string, data?: unknown) {
     this.logger.info(message, data);

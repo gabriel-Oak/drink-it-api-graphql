@@ -1,11 +1,6 @@
-import { createLogger } from 'winston';
-import { ILoggerService } from './types';
-import LoggerService from './logger-service';
+import { Logger, createLogger } from 'winston';
+import createContainer from '../../decorators/container';
+import './logger-service';
 
-let instance: ILoggerService;
-const createLoggerService = (): ILoggerService => {
-  if (!instance) instance = new LoggerService(createLogger());
-  return instance;
-};
-
-export default createLoggerService;
+createContainer().bind<Logger>('Logger')
+  .toDynamicValue(() => createLogger());

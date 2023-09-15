@@ -11,13 +11,5 @@
     "strict": true,
     "skipLibCheck": true,
     "baseUrl": ".",
-    "paths": {
-      "@App/*": [
-        "src/*"
-      ],
-      "lib/*": [
-        "common/*"
-      ]
-    }
   }
 }
