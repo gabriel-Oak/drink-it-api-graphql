@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { inject } from 'inversify';
 import { Either, Left } from '../../../../utils/types';
 import { IInternalUserDatasource } from '../../datasources/internal-datasource/types';
 import User, { UserProps } from '../../entities/user';
@@ -9,9 +10,13 @@ import {
   IDecodeUserTokenUsecase,
 } from './types';
 import { JWT_SECRET } from '../../../../utils/constants';
+import Injectable from '../../../../utils/decorators/injectable';
 
+@Injectable('IDecodeUserTokenUsecase')
 export default class DecodeUserTokenUsecase implements IDecodeUserTokenUsecase {
-  constructor(private readonly userDatasource: IInternalUserDatasource) { }
+  constructor(
+    @inject('IInternalUserDatasource') private readonly userDatasource: IInternalUserDatasource,
+  ) { }
 
   async execute(token: string) {
     try {

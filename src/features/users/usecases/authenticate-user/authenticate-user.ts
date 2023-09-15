@@ -27,7 +27,7 @@ export default class AuthenticateUserUsecase implements IAuthenticateUserUsecase
 
     if (await user.comparePasswords(payload.password)) {
       user.password = undefined;
-      return new Right(user)
+      return new Right(user);
     }
     return new Left(new AuthenticateUserWrongPasswordError());
   }

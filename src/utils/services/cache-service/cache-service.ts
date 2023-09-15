@@ -14,7 +14,7 @@ export default class CacheService implements ICacheService {
       let value: unknown = await this.client.get(key);
 
       try {
-        value = value ? JSON.parse(value as string) as T : null
+        value = value ? JSON.parse(value as string) as T : null;
       } catch (_) {
         return value as T;
       }
@@ -38,7 +38,7 @@ export default class CacheService implements ICacheService {
     } catch (error) {
       this.logger.warn((error as IError).message ?? error, error);
     }
-    return null
+    return null;
   }
 
   async delPrefix(prefix: string) {
@@ -50,6 +50,6 @@ export default class CacheService implements ICacheService {
     } catch (error) {
       this.logger.warn((error as IError).message ?? error, error);
     }
-    return null
+    return null;
   }
 }

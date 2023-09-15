@@ -1,4 +1,4 @@
-import { DataSource, Repository } from 'typeorm'
+import { DataSource, Repository } from 'typeorm';
 import {
   POSTGRE_HOST, POSTGRE_PASS, POSTGRE_PORT, POSTGRE_USER,
 } from '../../constants';
@@ -26,9 +26,20 @@ const DatabaseService = new DataSource({
 });
 const logger = createContainer().get<ILoggerService>('ILoggerService');
 
-DatabaseService.initialize()
-  .then(() => logger.info('Database initialized successfuly'))
-  .catch((error) => logger.error('Database initialize error', error));
+const initDB = () => {
+  logger.info('Initializing connection with database');
+  DatabaseService.initialize()
+    .then(() => logger.info('Database initialized successfuly'))
+    .catch((error) => {
+      logger.error('Database initialize error', error);
+      logger.warn('Trying to reconnect in 1m');
+      setTimeout(() => {
+        initDB();
+      }, 5000);
+    });
+};
+
+initDB();
 
 createContainer().bind<Repository<CocktailIngredient>>('Repository<CocktailIngredient>')
   .toDynamicValue(() => DatabaseService.getRepository(CocktailIngredient));

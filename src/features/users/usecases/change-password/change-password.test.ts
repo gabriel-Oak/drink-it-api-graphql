@@ -13,7 +13,7 @@ describe('ChangePasswordUsecase Tests', () => {
     userId: userMock.id!,
     oldPassword: 'dsuihfi',
     newPassword: 'dsiufuis',
-  }
+  };
   const usecase: IChangePasswordUsecase = new ChangePasswordUsecase(userDatasourceMock);
 
   beforeEach(() => {

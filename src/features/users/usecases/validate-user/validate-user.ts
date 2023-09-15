@@ -2,7 +2,9 @@ import { z, ZodError, ZodIssue } from 'zod';
 import { Left, Right } from '../../../../utils/types';
 import { UserProps } from '../../entities/user';
 import { IValidateUserUsecase, ValidateUserError } from './types';
+import Injectable from '../../../../utils/decorators/injectable';
 
+@Injectable('IValidateUserUsecase')
 export default class ValidateUserUsecase implements IValidateUserUsecase {
   execute(user: UserProps) {
     try {

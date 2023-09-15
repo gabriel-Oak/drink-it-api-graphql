@@ -6,8 +6,8 @@ import {
   AuthenticateUserWrongPasswordError,
   IAuthenticateUserUsecase,
   LoginPayload,
-} from './types'
-import AuthenticateUserUsecase from './authenticate-user'
+} from './types';
+import AuthenticateUserUsecase from './authenticate-user';
 import { Left, Right } from '../../../../utils/types';
 import User from '../../entities/user';
 

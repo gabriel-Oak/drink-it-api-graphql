@@ -1,6 +1,6 @@
 import BaseError from '../../../../utils/errors/base-error';
 import { Either } from '../../../../utils/types';
-import { InternalUserDatasourceError } from '../../datasources/internal-datasource/types'
+import { InternalUserDatasourceError } from '../../datasources/internal-datasource/types';
 import User, { UserProps } from '../../entities/user';
 
 export class InsertUserAlreadyExist extends BaseError {

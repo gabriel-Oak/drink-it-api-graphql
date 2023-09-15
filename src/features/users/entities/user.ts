@@ -72,7 +72,7 @@ export default class User {
       name: this.name,
       username: this.username,
       email: this.email,
-    }
+    };
   }
 
   updateProps(props: Partial<Omit<UserProps, 'id'>>) {

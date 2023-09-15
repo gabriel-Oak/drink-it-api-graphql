@@ -29,7 +29,7 @@
         "no-console": "error",
         "space-before-function-paren": "off",
         "@typescript-eslint/space-before-function-paren": "off",
-        "semi": "off",
+        "semi": "warn",
         "@typescript-eslint/semi": "off",
         "import/no-unresolved": "off",
         "import/extensions": "off",

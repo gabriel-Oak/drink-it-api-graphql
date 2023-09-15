@@ -13,7 +13,7 @@ describe('UpdateUserUsecase Tests', () => {
     email: 'string',
     username: 'string',
     password: 'string',
-  }
+  };
   const datasourceMock = mock<IInternalUserDatasource>();
   const usecase: IUpdateUserUsecase = new UpdateUserUsecase(datasourceMock);
 

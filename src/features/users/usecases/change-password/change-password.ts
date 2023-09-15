@@ -1,3 +1,5 @@
+import { inject } from 'inversify';
+import Injectable from '../../../../utils/decorators/injectable';
 import { Left, Right } from '../../../../utils/types';
 import { IInternalUserDatasource } from '../../datasources/internal-datasource/types';
 import {
@@ -7,9 +9,10 @@ import {
   IChangePasswordUsecase,
 } from './types';
 
+@Injectable('IChangePasswordUsecase')
 export default class ChangePasswordUsecase implements IChangePasswordUsecase {
   constructor(
-    private readonly userDatasource: IInternalUserDatasource,
+    @inject('IInternalUserDatasource') private readonly userDatasource: IInternalUserDatasource,
   ) { }
 
   async execute(payload: ChangePasswordPayload) {
