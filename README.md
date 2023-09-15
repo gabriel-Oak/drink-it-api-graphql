@@ -1,1 +1,1 @@
-# my-cocktail-api-graphql
+# drink-it-api-graphql
