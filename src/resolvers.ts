@@ -1,5 +1,5 @@
 import { NonEmptyArray } from 'type-graphql';
-import userResolvers from './features/users/resolvers';
+import userResolvers from './features/users';
 
 const resolvers = [
   ...userResolvers,

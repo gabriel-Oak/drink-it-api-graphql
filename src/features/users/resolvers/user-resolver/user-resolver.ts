@@ -1,14 +1,17 @@
-import { Query, Resolver } from 'type-graphql';
+import { Query } from 'type-graphql';
 import IUserResolver from './types';
-import { Service } from 'typedi';
+import { inject, injectable } from 'inversify';
+import IHelloUsecase from '../../usecases/hello-usecase/types';
+import Resolver from '../../../../utils/decorators/resolver';
 
-@Service()
 @Resolver()
 export default class UserResolver implements IUserResolver {
-  constructor() {}
+  constructor(
+    @inject('IHelloUsecase') private readonly helloUsecasse: IHelloUsecase
+  ) { }
 
   @Query(() => String)
   async hello() {
-    return 'Hello World';
+    return this.helloUsecasse.execute();
   }
 }
