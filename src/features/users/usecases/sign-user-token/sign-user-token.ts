@@ -9,12 +9,12 @@ import Injectable from '../../../../utils/decorators/injectable';
 @Injectable('ISignUserTokenUsecase')
 export default class SignUserTokenUsecase implements ISignUserTokenUsecase {
   constructor(
-    @inject('ICacheService') private readonly chage: ICacheService,
+    @inject('ICacheService') private readonly cache: ICacheService,
   ) { }
 
   execute(user: User) {
     const newUser = new User({ ...user, password: undefined });
-    this.chage.set(`user:${user.id!}`, newUser);
+    this.cache.set(`user:${user.id!}`, newUser);
 
     return jwt.sign(newUser.getProps(), JWT_SECRET, { expiresIn: '24h' });
   }

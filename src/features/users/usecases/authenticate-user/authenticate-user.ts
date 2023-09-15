@@ -13,13 +13,13 @@ import {
 @Injectable('IAuthenticateUserUsecase')
 export default class AuthenticateUserUsecase implements IAuthenticateUserUsecase {
   constructor(
-    @inject('IInternalUserDatasource') private readonly userUsecase: IInternalUserDatasource,
+    @inject('IInternalUserDatasource') private readonly userDatasource: IInternalUserDatasource,
   ) { }
 
   async execute(payload: LoginPayload) {
     if (!payload?.email || !payload?.password) return new Left(new AuthenticateInvalidError());
 
-    const userResult = await this.userUsecase.findByEmail(payload.email);
+    const userResult = await this.userDatasource.findByEmail(payload.email);
     if (userResult.isError) return userResult;
 
     const { success: user } = userResult;

@@ -3,6 +3,20 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type AuthUserResponse {
+  auth: String!
+  user: User!
+}
+
 type Query {
+  authenticateUser(email: String!, password: String!): AuthUserResponse!
   hello: String!
+}
+
+type User {
+  email: String!
+  id: ID!
+  name: String!
+  password: String!
+  username: String!
 }

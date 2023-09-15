@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint --fix src/",
+    "lint": "eslint src/ --fix",
     "test": "jest --clearCache && jest",
     "coverage": "npm test -- --coverage",
     "compile": "tsc",

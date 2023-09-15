@@ -1,11 +1,16 @@
+import { Field, ObjectType } from 'type-graphql';
 import BaseError from '../../../../utils/errors/base-error';
 import { Either } from '../../../../utils/types';
 import { InternalUserDatasourceError } from '../../datasources/internal-datasource/types';
 import User from '../../entities/user';
 
-export interface LoginPayload {
-  email: string;
-  password: string;
+@ObjectType()
+export class LoginPayload {
+  @Field()
+  public email!: string;
+
+  @Field()
+  public password!: string;
 }
 
 export class AuthenticateInvalidError extends BaseError {

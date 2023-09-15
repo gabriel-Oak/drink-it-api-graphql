@@ -12,8 +12,8 @@ const Resolver: typeof ResolverGQL = <T extends abstract new (...args: never) =>
   container.bind<T>(target).toSelf();
 
   const resolver = ResolverGQL();
-  resolver(target)
+  resolver(target);
   return target;
-}
+};
 
-export default Resolver
+export default Resolver;

@@ -1,9 +1,15 @@
+import { Field, ObjectType } from 'type-graphql';
 import BaseError from './base-error';
 
+@ObjectType()
 export default class HttpError extends BaseError {
   readonly type = 'http-error';
 
-  statusCode: number;
+  @Field()
+  public statusCode: number;
+
+  @Field()
+  public message!: string;
 
   constructor(props?: {
     message?: string;

@@ -1,12 +1,15 @@
 import { KeyType } from 'crypto';
 import { Redis as RedisClient } from 'ioredis';
+import { inject } from 'inversify';
 import { ICacheService, IError } from './types';
 import { ILoggerService } from '../logger-service/types';
+import Injectable from '../../decorators/injectable';
 
+@Injectable('ICacheService')
 export default class CacheService implements ICacheService {
   constructor(
-    private readonly client: RedisClient,
-    private readonly logger: ILoggerService,
+    @inject('RedisClient') private readonly client: RedisClient,
+    @inject('ILoggerService') private readonly logger: ILoggerService,
   ) { }
 
   async get<T>(key: string) {

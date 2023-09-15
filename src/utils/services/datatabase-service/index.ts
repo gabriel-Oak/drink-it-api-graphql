@@ -32,10 +32,10 @@ const initDB = () => {
     .then(() => logger.info('Database initialized successfuly'))
     .catch((error) => {
       logger.error('Database initialize error', error);
-      logger.warn('Trying to reconnect in 1m');
-      setTimeout(() => {
-        initDB();
-      }, 5000);
+      // logger.warn('Trying to reconnect in 1m');
+      // setTimeout(() => {
+      //   initDB();
+      // }, 5000);
     });
 };
 
