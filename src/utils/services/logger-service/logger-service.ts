@@ -5,10 +5,16 @@ export default class LoggerService implements ILoggerService {
   constructor(private readonly logger: Logger) {
     if (process.env.NODE_ENV !== 'production') {
       this.logger.add(new winston.transports.Console({
-        format: winston.format.simple()
+        format: this.format,
       }));
     }
   }
+
+  protected format = winston.format.printf(({ level, message }) => {
+    return `${new Date().toLocaleString('pt-BR')} [${level.toUpperCase()}]: ${message.message
+      || message.error
+      || message}`;
+  });
 
   info(message: string, data?: unknown) {
     this.logger.info(message, data);

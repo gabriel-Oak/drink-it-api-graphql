@@ -1,6 +1,6 @@
 import { Query } from 'type-graphql';
 import IUserResolver from './types';
-import { inject, injectable } from 'inversify';
+import { inject } from 'inversify';
 import IHelloUsecase from '../../usecases/hello-usecase/types';
 import Resolver from '../../../../utils/decorators/resolver';
 

@@ -25,7 +25,7 @@ async function main() {
   });
 
   const { url } = await startStandaloneServer(server);
-  logger.info(`Horay! Server UP and running at: ${url}`);
+  logger.info(`Horay! Server UP and running at ${url}`);
 }
 
 main();
