@@ -4,6 +4,6 @@ import IHelloUsecase from './types';
 @Injectable('IHelloUsecase')
 export default class HelloUsecase implements IHelloUsecase {
   execute() {
-    return 'Hello World Improved!!!!'
+    return 'Hello World Improved!!!!';
   }
 }

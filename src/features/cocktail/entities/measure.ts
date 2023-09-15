@@ -1,4 +1,6 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column, Entity, ManyToOne, PrimaryGeneratedColumn,
+} from 'typeorm';
 import Cocktail from './cocktail';
 import Ingredient from './ingredient';
 
@@ -11,7 +13,7 @@ export default class Measure {
   public cocktail?: Cocktail;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
   public measure?: string;
 

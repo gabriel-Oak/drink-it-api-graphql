@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import {
+  Column, Entity, OneToMany, PrimaryColumn,
+} from 'typeorm';
 import Measure from './measure';
 import Ingredient from './ingredient';
 
@@ -78,17 +80,17 @@ export default class Cocktail {
   public measures!: Measure[];
 
   @Column({
-    nullable: true
+    nullable: true,
   })
   public category?: string;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
   public video?: string;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
   public tags?: string;
 
@@ -97,48 +99,48 @@ export default class Cocktail {
 
   @Column({
     nullable: true,
-    type: 'text'
+    type: 'text',
   })
   public instructionsES?: string;
 
   @Column({
     nullable: true,
-    type: 'text'
+    type: 'text',
   })
   public instructionsDE?: string;
 
   @Column({
     nullable: true,
-    type: 'text'
+    type: 'text',
   })
   public instructionsFR?: string;
 
   @Column({
     nullable: true,
-    type: 'text'
+    type: 'text',
   })
   public instructionsIT?: string;
 
   @Column({
     nullable: true,
-    type: 'text'
+    type: 'text',
   })
   public instructionsPtBR?: string;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
   public dateModified?: string;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
   public iba?: string;
 
   constructor(props?: Cocktail) {
     Object.assign(this, {
       ...props,
-      measures: props?.measures.map((i) => new Measure(i))
+      measures: props?.measures.map((i) => new Measure(i)),
     });
   }
 
@@ -149,8 +151,8 @@ export default class Cocktail {
         measures.push(new Measure({
           measure: props[`strMeasure${key.split('Ingredient')[1]}` as keyof CocktailFromSourceProps],
           ingredient: new Ingredient({
-            name: props[key]!
-          })
+            name: props[key]!,
+          }),
         }));
       }
     });
@@ -171,7 +173,7 @@ export default class Cocktail {
       instructionsIT: props.strInstructionsIT,
       dateModified: props.dateModified,
       iba: props.strIBA,
-      measures
+      measures,
     });
   }
 }

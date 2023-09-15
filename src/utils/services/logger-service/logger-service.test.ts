@@ -1,7 +1,7 @@
 import { mock, mockReset } from 'jest-mock-extended';
+import { Logger } from 'winston';
 import LoggerService from './logger-service';
 import { ILoggerService } from './types';
-import { Logger } from 'winston';
 
 describe('LoggerService Tests', () => {
   const loggerMock = mock<Logger>();

@@ -1,4 +1,6 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn,
+} from 'typeorm';
 import { compare, hash } from 'bcryptjs';
 import { JWT_SECRET } from '../../../utils/constants';
 
@@ -17,13 +19,13 @@ export default class User {
 
   @Column({
     type: 'text',
-    unique: true
+    unique: true,
   })
   public name!: string;
 
   @Column({
     type: 'text',
-    unique: true
+    unique: true,
   })
   public email!: string;
 
@@ -32,7 +34,7 @@ export default class User {
 
   @Column({
     type: 'text',
-    nullable: true
+    nullable: true,
   })
   public password?: string;
 
@@ -43,9 +45,9 @@ export default class User {
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
-    if (this.password &&
-      !this.password.includes('$2a$12$') &&
-      this.password.length < 60
+    if (this.password
+      && !this.password.includes('$2a$12$')
+      && this.password.length < 60
     ) {
       this.password = await hash(this.password + JWT_SECRET, 12);
     }
@@ -53,7 +55,7 @@ export default class User {
 
   async comparePasswords(candidatePassword: string) {
     if (!this.password) return false;
-    return await compare(candidatePassword + JWT_SECRET, this.password);
+    return compare(candidatePassword + JWT_SECRET, this.password);
   }
 
   getProps() {
@@ -61,7 +63,7 @@ export default class User {
       id: this.id,
       name: this.name,
       username: this.username,
-      email: this.email
+      email: this.email,
     }
   }
 
@@ -69,7 +71,7 @@ export default class User {
     Object.assign(this, {
       name: props.name ?? this.name,
       username: props.username ?? this.username,
-      email: props.email ?? this.email
+      email: props.email ?? this.email,
     });
   }
 }

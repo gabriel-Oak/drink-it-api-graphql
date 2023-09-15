@@ -16,6 +16,6 @@ module.exports = {
     '**/?(*.)+(spec|test).[tj]s?(x)',
   ],
   setupFiles: [
-    "<rootDir>/jest.global.js"
-  ]
+    '<rootDir>/jest.global.js',
+  ],
 };

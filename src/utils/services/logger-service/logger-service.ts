@@ -10,11 +10,9 @@ export default class LoggerService implements ILoggerService {
     }
   }
 
-  protected format = winston.format.printf(({ level, message }) => {
-    return `${new Date().toLocaleString('pt-BR')} [${level.toUpperCase()}]: ${message.message
+  protected format = winston.format.printf(({ level, message }) => `${new Date().toLocaleString('pt-BR')} [${level.toUpperCase()}]: ${message.message
       || message.error
-      || message}`;
-  });
+      || message}`);
 
   info(message: string, data?: unknown) {
     this.logger.info(message, data);

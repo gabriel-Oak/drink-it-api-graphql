@@ -1,21 +1,19 @@
 import { injectable } from 'inversify';
-import createContainer from './container';
 import { Resolver as ResolverGQL } from 'type-graphql';
+import createContainer from './container';
 
-const Resolver: typeof ResolverGQL = <T extends abstract new (...args: never) => unknown>() => {
-  return (
-    target: T
-  ) => {
-    const inject = injectable();
-    inject(target as any);
-    const container = createContainer();
+const Resolver: typeof ResolverGQL = <T extends abstract new (...args: never) => unknown>() => (
+  target: T,
+) => {
+  const inject = injectable();
+  inject(target);
+  const container = createContainer();
 
-    container.bind<T>(target as any).toSelf();
+  container.bind<T>(target).toSelf();
 
-    const resolver = ResolverGQL();
-    resolver(target)
-    return target;
-  };
+  const resolver = ResolverGQL();
+  resolver(target)
+  return target;
 }
 
 export default Resolver

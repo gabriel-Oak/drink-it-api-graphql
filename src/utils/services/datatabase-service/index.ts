@@ -1,5 +1,7 @@
 import { DataSource } from 'typeorm'
-import { POSTGRE_HOST, POSTGRE_PASS, POSTGRE_PORT, POSTGRE_USER } from '../../constants';
+import {
+  POSTGRE_HOST, POSTGRE_PASS, POSTGRE_PORT, POSTGRE_USER,
+} from '../../constants';
 import createLoggerService from '../logger-service';
 import Cocktail from '../../../features/cocktail/entities/cocktail';
 import CocktailIngredient from '../../../features/cocktail/entities/measure';
@@ -17,9 +19,9 @@ const DatabaseService = new DataSource({
     CocktailIngredient,
     Ingredient,
     Cocktail,
-    User
+    User,
   ],
-  synchronize: true
+  synchronize: true,
 });
 
 const logger = createLoggerService();
