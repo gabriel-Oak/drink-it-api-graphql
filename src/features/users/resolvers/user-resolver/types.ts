@@ -9,6 +9,10 @@ export class AuthUserResponse {
 
   @Field()
   public auth!: string;
+
+  constructor(props: AuthUserResponse) {
+    Object.assign(this, props);
+  }
 }
 
 export default interface IUserResolver {

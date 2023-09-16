@@ -41,6 +41,6 @@ export default class UserResolver implements IUserResolver {
 
     const { success: user } = authResult;
     const auth = this.signUserTokenUsecase.execute(user);
-    return { user, auth } as AuthUserResponse;
+    return new AuthUserResponse({ user, auth });
   }
 }
