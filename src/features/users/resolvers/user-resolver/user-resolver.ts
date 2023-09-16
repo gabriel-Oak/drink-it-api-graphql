@@ -1,4 +1,6 @@
-import { Arg, Mutation, Query } from 'type-graphql';
+import {
+  Arg, Authorized, Ctx, Mutation, Query,
+} from 'type-graphql';
 import { inject } from 'inversify';
 import IUserResolver, { AuthUserResponse, NewUser, UserResponse } from './types';
 import IHelloUsecase from '../../usecases/hello-usecase/types';
@@ -8,6 +10,7 @@ import HttpError from '../../../../utils/errors/http-error';
 import { ISignUserTokenUsecase } from '../../usecases/sign-user-token/types';
 import { IValidateUserUsecase } from '../../usecases/validate-user/types';
 import { IInsertUserUsecase } from '../../usecases/insert-user/types';
+import IContext from '../../../../utils/middlewares/context/types';
 
 @Resolver()
 export default class UserResolver implements IUserResolver {
@@ -78,5 +81,16 @@ export default class UserResolver implements IUserResolver {
       user: new UserResponse(user),
       auth,
     });
+  }
+
+  @Authorized()
+  @Query(() => AuthUserResponse)
+  async refreshUserToken(@Ctx() ctx: IContext) {
+    const { user } = ctx;
+    const auth = this.signUserTokenUsecase.execute(user!);
+    return new AuthUserResponse({
+      user: new UserResponse(user!),
+      auth,
+    })
   }
 }

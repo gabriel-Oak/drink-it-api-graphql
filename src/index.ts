@@ -23,7 +23,7 @@ async function main() {
     emitSchemaFile: path.resolve(__dirname, 'utils', 'schema.gql'),
     container,
     validate: false,
-    globalMiddlewares: [AuthMiddleware],
+    authChecker: AuthMiddleware,
   });
 
   logger.info('Creating server');

@@ -8,7 +8,7 @@ describe('AuthMiddleware Tests', () => {
   const middleware = new AuthMiddleware();
 
   it('Should deny access', async () => {
-    const result = await middleware.use(mock<ResolverData<IContext>>({
+    const result = await middleware.check(mock<ResolverData<IContext>>({
       context: mock<IContext>({
         authError: new HttpError({ statusCode: 401, message: 'ooooops' }),
       }),
@@ -18,7 +18,7 @@ describe('AuthMiddleware Tests', () => {
   });
 
   it('Should allow access', async () => {
-    const result = await middleware.use({
+    const result = await middleware.check({
       context: {
         user: { id: 'siudhfui' },
       },

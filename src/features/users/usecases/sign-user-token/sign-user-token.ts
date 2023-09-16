@@ -16,6 +16,6 @@ export default class SignUserTokenUsecase implements ISignUserTokenUsecase {
     const newUser = new User({ ...user, password: undefined });
     this.cache.set(`user:${user.id!}`, newUser);
 
-    return jwt.sign(newUser.getProps(), JWT_SECRET, { expiresIn: '24h' });
+    return jwt.sign(newUser.getProps(), JWT_SECRET, { expiresIn: '5 days' });
   }
 }

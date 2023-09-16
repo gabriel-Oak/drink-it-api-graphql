@@ -1,6 +1,7 @@
 import { Field, InputType, ObjectType } from 'type-graphql';
 import { UserProps } from '../../entities/user';
 import HttpError from '../../../../utils/errors/http-error';
+import IContext from '../../../../utils/middlewares/context/types';
 
 @ObjectType()
 export class UserResponse implements Omit<UserProps, 'password'> {
@@ -43,5 +44,5 @@ export default interface IUserResolver {
   hello: () => Promise<string>;
   authenticateUser: (email: string, password: string) => Promise<HttpError | AuthUserResponse>;
   createUser(newUser: NewUser): Promise<HttpError | AuthUserResponse>;
-  // decodeUser(newUser: NewUser): Promise<HttpError | AuthUserResponse>;
+  refreshUserToken(ctx: IContext): Promise<AuthUserResponse>;
 }
