@@ -3,7 +3,9 @@ import {
   BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn,
 } from 'typeorm';
 import { compare, hash } from 'bcryptjs';
-import { Field, ID, ObjectType } from 'type-graphql';
+import {
+  Field, ID, ObjectType,
+} from 'type-graphql';
 import { JWT_SECRET } from '../../../utils/constants';
 
 export interface UserProps {

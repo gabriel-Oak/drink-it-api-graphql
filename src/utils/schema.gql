@@ -5,7 +5,18 @@
 
 type AuthUserResponse {
   auth: String!
-  user: User!
+  user: UserResponse!
+}
+
+type Mutation {
+  createUser(newUser: NewUser!): AuthUserResponse!
+}
+
+input NewUser {
+  email: String!
+  name: String!
+  password: String!
+  username: String!
 }
 
 type Query {
@@ -13,10 +24,9 @@ type Query {
   hello: String!
 }
 
-type User {
+type UserResponse {
   email: String!
-  id: ID!
+  id: String!
   name: String!
-  password: String!
   username: String!
 }

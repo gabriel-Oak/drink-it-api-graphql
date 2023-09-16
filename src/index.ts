@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import 'reflect-metadata';
 import './config';
 import path from 'path';
@@ -18,6 +19,7 @@ async function main() {
     resolvers,
     emitSchemaFile: path.resolve(__dirname, 'utils', 'schema.gql'),
     container,
+    validate: false,
   });
 
   logger.info('Creating server');
