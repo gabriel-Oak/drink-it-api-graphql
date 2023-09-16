@@ -82,4 +82,37 @@ describe('UserResolver Tests', () => {
 
     expect(result).toBeInstanceOf(AuthUserResponse);
   });
+
+  // it('Should decode user', async () => {
+  //   decodeUserTokenMock.execute.mockImplementation(async () => new Right(userMock));
+  //   await controller.decode({ ...requestMock, headers: { auth } }, replyMock);
+  //   expect(replyMock.send).toHaveBeenCalledWith(userMock.getProps());
+  // });
+
+  // it('Should return invalid auth', async () => {
+  //   const error = new DecodeUserInvalidTokenError();
+  //   decodeUserTokenMock.execute
+  //     .mockImplementation(async () => new Left(error));
+  //   await controller.decode({ ...requestMock, headers: { auth } }, replyMock);
+  //   expect(replyMock.send).toHaveBeenCalledWith(new HttpError({ ...error, statusCode: 400 }));
+  //   expect(replyMock.code).toHaveBeenCalledWith(400);
+  // });
+
+  // it('Should return decode user not found', async () => {
+  //   const error = new DecodeUserNotFoundError();
+  //   decodeUserTokenMock.execute
+  //     .mockImplementation(async () => new Left(error));
+  //   await controller.decode({ ...requestMock, headers: { auth } }, replyMock);
+  //   expect(replyMock.send).toHaveBeenCalledWith(new HttpError({ ...error, statusCode: 404 }));
+  //   expect(replyMock.code).toHaveBeenCalledWith(404);
+  // });
+
+  // it('Should handle datasource error', async () => {
+  //   const error = new InternalUserDatasourceError('');
+  //   decodeUserTokenMock.execute
+  //     .mockImplementation(async () => new Left(error));
+  //   await controller.decode({ ...requestMock, headers: { auth } }, replyMock);
+  //   expect(replyMock.send).toHaveBeenCalledWith(new HttpError(error));
+  //   expect(replyMock.code).toHaveBeenCalledWith(500);
+  // });
 });

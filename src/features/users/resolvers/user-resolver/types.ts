@@ -43,4 +43,5 @@ export default interface IUserResolver {
   hello: () => Promise<string>;
   authenticateUser: (email: string, password: string) => Promise<HttpError | AuthUserResponse>;
   createUser(newUser: NewUser): Promise<HttpError | AuthUserResponse>;
+  // decodeUser(newUser: NewUser): Promise<HttpError | AuthUserResponse>;
 }

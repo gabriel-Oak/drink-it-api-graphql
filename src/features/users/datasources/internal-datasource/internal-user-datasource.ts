@@ -17,6 +17,7 @@ export default class InternalUserDatasource implements IInternalUserDatasource {
   async findByEmail(email: string) {
     try {
       const user = await this.userRepository.findOneBy({ email });
+      delete user?.password;
       return new Right(user);
     } catch (e) {
       const error = new InternalUserDatasourceError(
@@ -34,6 +35,7 @@ export default class InternalUserDatasource implements IInternalUserDatasource {
         { email: query.email },
         { username: query.username },
       ]);
+      delete user?.password;
       return new Right(user);
     } catch (e) {
       const error = new InternalUserDatasourceError(
@@ -48,6 +50,7 @@ export default class InternalUserDatasource implements IInternalUserDatasource {
   async findById(userId: string) {
     try {
       const user = await this.userRepository.findOneBy({ id: userId });
+      delete user?.password;
       return new Right(user);
     } catch (e) {
       const error = new InternalUserDatasourceError(
@@ -62,7 +65,7 @@ export default class InternalUserDatasource implements IInternalUserDatasource {
   async save(user: User) {
     try {
       const result = await this.userRepository.save(user);
-      result.password = undefined;
+      delete result.password;
       return new Right(result);
     } catch (e) {
       const error = new InternalUserDatasourceError(
@@ -94,6 +97,7 @@ export default class InternalUserDatasource implements IInternalUserDatasource {
       if (!user) throw new Error(`Oops, user ${userId} not found, might be already deleted`);
 
       const result = await this.userRepository.remove(user);
+      delete result?.password;
       return new Right(result);
     } catch (e) {
       const error = new InternalUserDatasourceError(
