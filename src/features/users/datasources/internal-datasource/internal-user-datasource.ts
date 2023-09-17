@@ -17,7 +17,6 @@ export default class InternalUserDatasource implements IInternalUserDatasource {
   async findByEmail(email: string) {
     try {
       const user = await this.userRepository.findOneBy({ email });
-      delete user?.password;
       return new Right(user);
     } catch (e) {
       const error = new InternalUserDatasourceError(
@@ -50,7 +49,6 @@ export default class InternalUserDatasource implements IInternalUserDatasource {
   async findById(userId: string) {
     try {
       const user = await this.userRepository.findOneBy({ id: userId });
-      delete user?.password;
       return new Right(user);
     } catch (e) {
       const error = new InternalUserDatasourceError(

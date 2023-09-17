@@ -37,7 +37,7 @@ async function main() {
       [StandaloneServerContextFunctionArgument], IContext
     >,
   });
-  logger.info(`Horay! Server UP and running at ${url}`);
+  logger.info(`Hooray!!! Server UP and running at ${url}`);
 }
 
 main();

@@ -11,6 +11,7 @@ import { ISignUserTokenUsecase } from '../../usecases/sign-user-token/types';
 import { IValidateUserUsecase } from '../../usecases/validate-user/types';
 import { IInsertUserUsecase } from '../../usecases/insert-user/types';
 import IContext from '../../../../utils/middlewares/context/types';
+import { ChangePassword, IChangePasswordUsecase } from '../../usecases/change-password/types';
 
 @Resolver()
 export default class UserResolver implements IUserResolver {
@@ -20,6 +21,7 @@ export default class UserResolver implements IUserResolver {
     @inject('ISignUserTokenUsecase') private readonly signUserTokenUsecase: ISignUserTokenUsecase,
     @inject('IValidateUserUsecase') private readonly validateUserUsecase: IValidateUserUsecase,
     @inject('IInsertUserUsecase') private readonly insertUserUsecase: IInsertUserUsecase,
+    @inject('IChangePasswordUsecase') private readonly changePasswordUsecase: IChangePasswordUsecase,
   ) { }
 
   @Query(() => String)
@@ -87,10 +89,26 @@ export default class UserResolver implements IUserResolver {
   @Query(() => AuthUserResponse)
   async refreshUserToken(@Ctx() ctx: IContext) {
     const { user } = ctx;
-    const auth = this.signUserTokenUsecase.execute(user!);
+    const auth = this.signUserTokenUsecase.execute(user);
     return new AuthUserResponse({
-      user: new UserResponse(user!),
+      user: new UserResponse(user),
       auth,
     })
+  }
+
+  @Authorized()
+  @Mutation(() => String)
+  async changeUserPassword(
+    @Arg('payload') payload: ChangePassword,
+    @Ctx() ctx: IContext,
+  ) {
+    const { user } = ctx;
+    const result = await this.changePasswordUsecase.execute({
+      ...payload,
+      userId: user.id!,
+    });
+    if (result.isSuccess) return result.success;
+
+    return new HttpError({ statusCode: 400, ...result.error });
   }
 }

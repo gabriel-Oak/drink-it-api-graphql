@@ -1,3 +1,4 @@
+import { Field, InputType } from 'type-graphql';
 import BaseError from '../../../../utils/errors/base-error';
 import { Either } from '../../../../utils/types';
 import { InternalUserDatasourceError } from '../../datasources/internal-datasource/types';
@@ -17,15 +18,17 @@ export class ChangePasswordInvalidOldPassError extends ChangePasswordInvalidPass
 }
 
 export type changePasswordErrors = InternalUserDatasourceError
-| ChangePasswordInvalidPassError
-| ChangePasswordInvalidOldPassError;
+  | ChangePasswordInvalidPassError
+  | ChangePasswordInvalidOldPassError;
 
-export interface ChangePasswordBody {
-  oldPassword: string;
-  newPassword: string;
+@InputType()
+export class ChangePassword {
+  @Field() oldPassword!: string;
+
+  @Field() newPassword!: string;
 }
 
-export interface ChangePasswordPayload extends ChangePasswordBody {
+export interface ChangePasswordPayload extends ChangePassword {
   userId: string;
 }
 

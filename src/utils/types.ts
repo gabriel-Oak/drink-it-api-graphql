@@ -2,6 +2,8 @@
 export class Left<E> {
   readonly isError = true;
 
+  readonly isSuccess = false;
+
   public error!: E;
 
   constructor(error: E) {
@@ -11,6 +13,8 @@ export class Left<E> {
 
 export class Right<R> {
   readonly isError = false;
+
+  readonly isSuccess = true;
 
   public success!: R;
 

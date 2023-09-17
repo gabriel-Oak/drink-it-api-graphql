@@ -6,6 +6,6 @@ export default interface IContext {
     authorization: string;
     [key: string]: string;
   },
-  user?: User;
+  user: User;
   authError?: HttpError;
 }

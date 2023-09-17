@@ -15,8 +15,12 @@ const context = async ({ req }: StandaloneServerContextFunctionArgument) => {
     const container = createContainer();
     const decodeUser = container.get<IDecodeUserTokenUsecase>('IDecodeUserTokenUsecase');
     const decodeResult = await decodeUser.execute(token);
-    if (decodeResult.isError) authError = new HttpError({ statusCode: 401, ...decodeResult.error });
-    else user = decodeResult.success;
+    if (decodeResult.isError) {
+      authError = new HttpError({ statusCode: 401, ...decodeResult.error });
+    } else {
+      user = decodeResult.success;
+      delete user.password;
+    }
   }
 
   return {

@@ -10,6 +10,7 @@ import HttpError from '../../../../utils/errors/http-error';
 import { IValidateUserUsecase, ValidateUserError } from '../../usecases/validate-user/types';
 import { IInsertUserUsecase, InsertUserAlreadyExist } from '../../usecases/insert-user/types';
 import IContext from '../../../../utils/middlewares/context/types';
+import { ChangePassword, ChangePasswordInvalidOldPassError, IChangePasswordUsecase } from '../../usecases/change-password/types';
 
 describe('UserResolver Tests', () => {
   const usecaseMock = mock<IHelloUsecase>();
@@ -17,6 +18,7 @@ describe('UserResolver Tests', () => {
   const signTokenUsecaseMock = mock<ISignUserTokenUsecase>();
   const validateUsecaseMock = mock<IValidateUserUsecase>();
   const insertUsecaseMock = mock<IInsertUserUsecase>();
+  const changePasswordMock = mock<IChangePasswordUsecase>();
 
   const resolver: IUserResolver = new UserResolver(
     usecaseMock,
@@ -24,6 +26,7 @@ describe('UserResolver Tests', () => {
     signTokenUsecaseMock,
     validateUsecaseMock,
     insertUsecaseMock,
+    changePasswordMock,
   );
 
   beforeEach(() => {
@@ -32,6 +35,7 @@ describe('UserResolver Tests', () => {
     mockReset(signTokenUsecaseMock);
     mockReset(validateUsecaseMock);
     mockReset(insertUsecaseMock);
+    mockReset(changePasswordMock);
 
     signTokenUsecaseMock.execute
       .mockImplementation(() => 'sdhifuhsdiugsdf.udsuygsdyugysdf.dsuhfisdh');
@@ -89,5 +93,27 @@ describe('UserResolver Tests', () => {
 
     expect(result).toBeInstanceOf(AuthUserResponse);
     expect(result.auth).toBe('sdhifuhsdiugsdf.udsuygsdyugysdf.dsuhfisdh');
+  });
+
+  it('Should return error changing user password', async () => {
+    changePasswordMock.execute
+      .mockImplementationOnce(async () => new Left(new ChangePasswordInvalidOldPassError()));
+    const result = await resolver.changeUserPassword(
+      mock<ChangePassword>(),
+      mock<IContext>({ user: mock<User>({ id: 'sodiufhoiusdhf' }) }),
+    );
+
+    expect(result).toBeInstanceOf(HttpError);
+  });
+
+  it('Should return success changing user password', async () => {
+    changePasswordMock.execute
+      .mockImplementationOnce(async () => new Right('Hooray!'));
+    const result = await resolver.changeUserPassword(
+      mock<ChangePassword>(),
+      mock<IContext>({ user: mock<User>({ id: 'sodiufhoiusdhf' }) }),
+    );
+
+    expect(result).toBe('Hooray!');
   });
 });

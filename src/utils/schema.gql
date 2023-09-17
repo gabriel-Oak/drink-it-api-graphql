@@ -8,7 +8,13 @@ type AuthUserResponse {
   user: UserResponse!
 }
 
+input ChangePassword {
+  newPassword: String!
+  oldPassword: String!
+}
+
 type Mutation {
+  changeUserPassword(payload: ChangePassword!): String!
   createUser(newUser: NewUser!): AuthUserResponse!
 }
 
