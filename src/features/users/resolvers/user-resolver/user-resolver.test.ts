@@ -1,5 +1,5 @@
 import { mock, mockReset } from 'jest-mock-extended';
-import IUserResolver, { AuthUserResponse, NewUser } from './types';
+import IUserResolver, { AuthUserResponse, NewUser, UpdateUser } from './types';
 import UserResolver from './user-resolver';
 import IHelloUsecase from '../../usecases/hello-usecase/types';
 import { AuthenticateUserWrongPasswordError, IAuthenticateUserUsecase } from '../../usecases/authenticate-user/types';
@@ -11,6 +11,8 @@ import { IValidateUserUsecase, ValidateUserError } from '../../usecases/validate
 import { IInsertUserUsecase, InsertUserAlreadyExist } from '../../usecases/insert-user/types';
 import IContext from '../../../../utils/middlewares/context/types';
 import { ChangePassword, ChangePasswordInvalidOldPassError, IChangePasswordUsecase } from '../../usecases/change-password/types';
+import { IUpdateUserUsecase } from '../../usecases/update-user/types';
+import { InternalUserDatasourceError } from '../../datasources/internal-datasource/types';
 
 describe('UserResolver Tests', () => {
   const usecaseMock = mock<IHelloUsecase>();
@@ -19,6 +21,7 @@ describe('UserResolver Tests', () => {
   const validateUsecaseMock = mock<IValidateUserUsecase>();
   const insertUsecaseMock = mock<IInsertUserUsecase>();
   const changePasswordMock = mock<IChangePasswordUsecase>();
+  const updateMock = mock<IUpdateUserUsecase>();
 
   const resolver: IUserResolver = new UserResolver(
     usecaseMock,
@@ -27,6 +30,7 @@ describe('UserResolver Tests', () => {
     validateUsecaseMock,
     insertUsecaseMock,
     changePasswordMock,
+    updateMock,
   );
 
   beforeEach(() => {
@@ -36,6 +40,7 @@ describe('UserResolver Tests', () => {
     mockReset(validateUsecaseMock);
     mockReset(insertUsecaseMock);
     mockReset(changePasswordMock);
+    mockReset(updateMock);
 
     signTokenUsecaseMock.execute
       .mockImplementation(() => 'sdhifuhsdiugsdf.udsuygsdyugysdf.dsuhfisdh');
@@ -115,5 +120,27 @@ describe('UserResolver Tests', () => {
     );
 
     expect(result).toBe('Hooray!');
+  });
+
+  it('Should update user', async () => {
+    updateMock.execute
+      .mockImplementationOnce(async () => new Right('Hooray!'));
+    const result = await resolver.updateUser(
+      mock<UpdateUser>(),
+      mock<IContext>({ user: mock<User>({ id: 'sodiufhoiusdhf' }) }),
+    );
+
+    expect(result).toBe('Hooray!');
+  });
+
+  it('Should handle update error', async () => {
+    updateMock.execute
+      .mockImplementationOnce(async () => new Left(new InternalUserDatasourceError('Oh no')));
+    const result = await resolver.updateUser(
+      mock<UpdateUser>(),
+      mock<IContext>({ user: mock<User>({ id: 'sodiufhoiusdhf' }) }),
+    );
+
+    expect(result).toBeInstanceOf(HttpError);
   });
 });

@@ -16,6 +16,7 @@ input ChangePassword {
 type Mutation {
   changeUserPassword(payload: ChangePassword!): String!
   createUser(newUser: NewUser!): AuthUserResponse!
+  updateUser(user: UpdateUser!): String!
 }
 
 input NewUser {
@@ -29,6 +30,12 @@ type Query {
   authenticateUser(email: String!, password: String!): AuthUserResponse!
   hello: String!
   refreshUserToken: AuthUserResponse!
+}
+
+input UpdateUser {
+  email: String
+  name: String
+  username: String
 }
 
 type UserResponse {

@@ -44,10 +44,23 @@ export class NewUser implements Omit<UserProps, 'id'> {
   @Field() password!: string;
 }
 
+@InputType()
+export class UpdateUser implements Partial<Omit<UserProps, 'id' | 'password'>> {
+  @Field({ nullable: true })
+  public name?: string;
+
+  @Field({ nullable: true })
+  public email?: string;
+
+  @Field({ nullable: true })
+  public username?: string;
+}
+
 export default interface IUserResolver {
   hello: () => Promise<string>;
   authenticateUser: (email: string, password: string) => Promise<HttpError | AuthUserResponse>;
   createUser: (newUser: NewUser) => Promise<HttpError | AuthUserResponse>;
   refreshUserToken: (ctx: IContext) => Promise<AuthUserResponse>;
   changeUserPassword: (payload: ChangePassword, ctx: IContext) => Promise<HttpError | string>;
+  updateUser: (user: UpdateUser, ctx: IContext) => Promise<HttpError | string>;
 }

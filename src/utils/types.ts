@@ -11,7 +11,7 @@ export class Left<E> {
   }
 }
 
-export class Right<R> {
+export class Right<R = null> {
   readonly isError = false;
 
   readonly isSuccess = true;

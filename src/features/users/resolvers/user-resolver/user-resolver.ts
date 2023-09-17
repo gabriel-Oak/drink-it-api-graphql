@@ -2,7 +2,9 @@ import {
   Arg, Authorized, Ctx, Mutation, Query,
 } from 'type-graphql';
 import { inject } from 'inversify';
-import IUserResolver, { AuthUserResponse, NewUser, UserResponse } from './types';
+import IUserResolver, {
+  AuthUserResponse, NewUser, UpdateUser, UserResponse,
+} from './types';
 import IHelloUsecase from '../../usecases/hello-usecase/types';
 import Resolver from '../../../../utils/decorators/resolver';
 import { IAuthenticateUserUsecase } from '../../usecases/authenticate-user/types';
@@ -12,6 +14,7 @@ import { IValidateUserUsecase } from '../../usecases/validate-user/types';
 import { IInsertUserUsecase } from '../../usecases/insert-user/types';
 import IContext from '../../../../utils/middlewares/context/types';
 import { ChangePassword, IChangePasswordUsecase } from '../../usecases/change-password/types';
+import { IUpdateUserUsecase } from '../../usecases/update-user/types';
 
 @Resolver()
 export default class UserResolver implements IUserResolver {
@@ -22,6 +25,7 @@ export default class UserResolver implements IUserResolver {
     @inject('IValidateUserUsecase') private readonly validateUserUsecase: IValidateUserUsecase,
     @inject('IInsertUserUsecase') private readonly insertUserUsecase: IInsertUserUsecase,
     @inject('IChangePasswordUsecase') private readonly changePasswordUsecase: IChangePasswordUsecase,
+    @inject('IUpdateUserUsecase') private readonly updateUserUsecase: IUpdateUserUsecase,
   ) { }
 
   @Query(() => String)
@@ -110,5 +114,18 @@ export default class UserResolver implements IUserResolver {
     if (result.isSuccess) return result.success;
 
     return new HttpError({ statusCode: 400, ...result.error });
+  }
+
+  @Authorized()
+  @Mutation(() => String)
+  async updateUser(
+    @Arg('user') newUser: UpdateUser,
+    @Ctx() ctx: IContext,
+  ) {
+    const { user } = ctx;
+    const result = await this.updateUserUsecase.execute(user, newUser);
+    if (result.isSuccess) return result.success;
+
+    return new HttpError(result.error);
   }
 }
