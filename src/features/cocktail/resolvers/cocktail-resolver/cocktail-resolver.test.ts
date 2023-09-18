@@ -9,16 +9,20 @@ import { cocktailDetailMock } from '../../mocks/cocktail';
 import HttpError from '../../../../utils/errors/http-error';
 import { CocktailDatasourceError } from '../../datasources/external-datasource/types';
 import '../../entities/measure';
+import { GetDetailsValidationError, IGetDetailsUsecase } from '../../usecases/get-details/type';
 
 describe('CocktailResolver Tests', () => {
   const getCocktailsMock = mock<IGetCocktailsUsecase>();
+  const getDetailsMock = mock<IGetDetailsUsecase>();
   const resolver: ICocktailResolver = new CocktailResolver(
     getCocktailsMock,
+    getDetailsMock,
   );
   const successMock = [Cocktail.fromSource(cocktailDetailMock as any)];
 
   beforeEach(() => {
     mockReset(getCocktailsMock);
+    mockReset(getDetailsMock);
   });
 
   it('Should return cocktails', async () => {
@@ -55,5 +59,24 @@ describe('CocktailResolver Tests', () => {
     const result = await resolver.getCocktails(mock<CocktailQuery>());
 
     expect(result).toEqual(successMock);
+  });
+
+  it('Should return cocktail details', async () => {
+    getDetailsMock.execute
+      .mockImplementation(async () => new Right(Cocktail.fromSource(cocktailDetailMock as any)));
+    const result = await resolver.getCocktailDetail('test3298472');
+
+    expect(result).toEqual(Cocktail.fromSource(cocktailDetailMock as any));
+  });
+
+  it('Should return get details validation error', async () => {
+    getDetailsMock.execute
+      .mockImplementation(async () => new Left(new GetDetailsValidationError()));
+    const result = await resolver.getCocktailDetail('test3298472');
+
+    expect(result).toEqual(new HttpError({
+      statusCode: 400,
+      message: 'Sorry, you need to specify a cocktail id to search',
+    }));
   });
 });

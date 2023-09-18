@@ -31,4 +31,5 @@ export class CocktailQuery {
 
 export default interface ICocktailResolver {
   getCocktails: (query: CocktailQuery) => Promise<HttpError | Cocktail[]>;
+  getCocktailDetail: (cocktailId: string) => Promise<HttpError | Cocktail>;
 }
