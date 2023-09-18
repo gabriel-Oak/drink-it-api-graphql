@@ -8,7 +8,7 @@
     "test": "jest --clearCache && jest",
     "coverage": "npm test -- --coverage",
     "start": "npm run compile && node ./dist/index.js",
-    "dev": "tsnd --respawn --transpile-only src/api/dev.ts",
+    "dev": "tsnd --respawn --transpile-only src/index.ts",
     "prepare": "husky install",
     "build": "tsc --project tsconfig.build.json"
   },
@@ -19,8 +19,11 @@
     "@apollo/server": "^4.9.3",
     "@as-integrations/aws-lambda": "^3.1.0",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
     "class-validator": "^0.14.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "express": "^4.18.2",
     "graphql": "^16.6.0",
     "graphql-scalars": "^1.22.2",
     "inversify": "^6.0.1",
@@ -36,6 +39,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^17.7.0",
     "@types/bcryptjs": "^2.4.3",
+    "@types/cors": "^2.8.14",
     "@types/jest": "^29.5.4",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "^20.6.0",

@@ -1,7 +1,14 @@
 {
-  "build": {
-    "env": {
-      "NODEJS_AWS_HANDLER_NAME": "graphqlHandler"
+  "builds": [
+    {
+      "src": "src/index.js",
+      "use": "@now/node"
     }
-  }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "src/index.js"
+    }
+  ]
 }
