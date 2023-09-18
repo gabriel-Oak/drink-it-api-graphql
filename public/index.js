@@ -47,6 +47,9 @@ async function main() {
     logger.info(`Hooray!!! Server UP and running at port ${port}`);
 }
 exports.main = main;
+app.get('/ping', async (_req, res) => {
+    res.json('pong');
+});
 main();
 app.listen(port);
 exports.default = app;

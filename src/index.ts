@@ -5,7 +5,7 @@ import './config';
 import path from 'path';
 import { ApolloServer } from '@apollo/server';
 import { buildSchema } from 'type-graphql';
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
 import { json } from 'body-parser';
@@ -48,6 +48,9 @@ export async function main() {
   logger.info(`Hooray!!! Server UP and running at port ${port}`);
 }
 
+app.get('/ping', async (_req: Request, res: Response) => {
+  res.json('pong')
+});
 main();
 app.listen(port);
 
