@@ -1,7 +1,7 @@
 {
   "builds": [
     {
-      "src": "public/index.js",
+      "src": "public/vercel-server.js",
       "use": "@vercel/node",
       "config": {
         "includeFiles": [
@@ -13,7 +13,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "public/index.js"
+      "dest": "public/vercel-server.js"
     }
   ]
 }
