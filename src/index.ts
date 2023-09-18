@@ -5,7 +5,7 @@ import './config';
 import path from 'path';
 import { ApolloServer } from '@apollo/server';
 import { buildSchema } from 'type-graphql';
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
 import { json } from 'body-parser';
@@ -41,22 +41,20 @@ export async function main() {
   });
 
   await server.start();
-  // app.use('/graphql', cors<cors.CorsRequest>(), json(), expressMiddleware(server, {
-  //   context,
-  // }));
-
   logger.info(`Hooray!!! Server UP and running at port ${port}`);
   return server;
 }
 
 app.get('/ping', async (_req: Request, res: Response) => {
-  res.json('pong')
+  res.json('pong 🏓');
 });
-main().then((server) => {
-  app.use('/graphql', cors<cors.CorsRequest>(), json(), expressMiddleware(server, {
-    context,
-  }));
-});
+
 app.listen(port);
+app.use(cors());
+app.use(json());
+app.use('/graphql', async (req: Request, res: Response, next: NextFunction) => {
+  const server = await main();
+  return expressMiddleware(server, { context })(req, res, next);
+});
 
 export default app;

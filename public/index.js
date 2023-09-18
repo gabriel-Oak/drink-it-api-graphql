@@ -41,20 +41,18 @@ async function main() {
         logger,
     });
     await server.start();
-    // app.use('/graphql', cors<cors.CorsRequest>(), json(), expressMiddleware(server, {
-    //   context,
-    // }));
     logger.info(`Hooray!!! Server UP and running at port ${port}`);
     return server;
 }
 exports.main = main;
 app.get('/ping', async (_req, res) => {
-    res.json('pong');
-});
-main().then((server) => {
-    app.use('/graphql', (0, cors_1.default)(), (0, body_parser_1.json)(), (0, express4_1.expressMiddleware)(server, {
-        context: context_1.default,
-    }));
+    res.json('pong 🏓');
 });
 app.listen(port);
+app.use((0, cors_1.default)());
+app.use((0, body_parser_1.json)());
+app.use('/graphql', async (req, res, next) => {
+    const server = await main();
+    return (0, express4_1.expressMiddleware)(server, { context: context_1.default })(req, res, next);
+});
 exports.default = app;
