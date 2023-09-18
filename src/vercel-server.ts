@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import './utils/services';
 import express, { NextFunction, Request, Response } from 'express';
 import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
