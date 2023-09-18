@@ -41,7 +41,7 @@ async function main() {
         logger,
     });
     await server.start();
-    app.use('/**', (0, cors_1.default)(), (0, body_parser_1.json)(), (0, express4_1.expressMiddleware)(server, {
+    app.use('/graphql', (0, cors_1.default)(), (0, body_parser_1.json)(), (0, express4_1.expressMiddleware)(server, {
         context: context_1.default,
     }));
     logger.info(`Hooray!!! Server UP and running at port ${port}`);

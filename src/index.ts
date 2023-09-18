@@ -41,7 +41,7 @@ export async function main() {
   });
 
   await server.start();
-  app.use('/**', cors<cors.CorsRequest>(), json(), expressMiddleware(server, {
+  app.use('/graphql', cors<cors.CorsRequest>(), json(), expressMiddleware(server, {
     context,
   }));
 
