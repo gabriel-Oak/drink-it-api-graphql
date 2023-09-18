@@ -7,10 +7,10 @@
     "lint": "eslint src/ --fix",
     "test": "jest --clearCache && jest",
     "coverage": "npm test -- --coverage",
-    "compile": "tsc",
     "start": "npm run compile && node ./dist/index.js",
     "dev": "tsnd --respawn --transpile-only src/api/dev.ts",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
