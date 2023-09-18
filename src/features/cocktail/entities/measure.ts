@@ -1,22 +1,29 @@
 import {
   Column, Entity, ManyToOne, PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Field, ObjectType } from 'type-graphql';
 import Cocktail from './cocktail';
 import Ingredient from './ingredient';
 
+const nullable = {
+  nullable: true,
+};
+
 @Entity()
+@ObjectType()
 export default class Measure {
+  @Field()
   @PrimaryGeneratedColumn('uuid')
   public id?: string;
 
   @ManyToOne(() => Cocktail, (cocktail) => cocktail.measures)
   public cocktail?: Cocktail;
 
-  @Column({
-    nullable: true,
-  })
+  @Field(nullable)
+  @Column(nullable)
   public measure?: string;
 
+  @Field()
   @ManyToOne(() => Ingredient, (ingredient) => ingredient.cocktails)
   public ingredient!: Ingredient;
 

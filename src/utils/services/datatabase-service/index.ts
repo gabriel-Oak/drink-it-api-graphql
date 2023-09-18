@@ -40,8 +40,7 @@ const initDB = () => {
 };
 
 initDB();
-
-createContainer().bind<Repository<CocktailIngredient>>('Repository<CocktailIngredient>')
+createContainer().bind<Repository<CocktailIngredient>>('Repository<Measure>')
   .toDynamicValue(() => DatabaseService.getRepository(CocktailIngredient));
 createContainer().bind<Repository<Ingredient>>('Repository<Ingredient>')
   .toDynamicValue(() => DatabaseService.getRepository(Ingredient));

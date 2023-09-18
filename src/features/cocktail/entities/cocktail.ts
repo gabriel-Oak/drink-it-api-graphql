@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { Field, ObjectType } from 'type-graphql';
 import {
   Column, Entity, OneToMany, PrimaryColumn,
 } from 'typeorm';
@@ -59,82 +59,92 @@ export interface CocktailFromSourceProps {
   dateModified?: string;
 }
 
+const nullable = { nullable: true };
+
 @Entity()
+@ObjectType()
 export default class Cocktail {
+  @Field()
   @PrimaryColumn()
   public id!: string;
 
+  @Field()
   @Column()
   public name!: string;
 
+  @Field()
   @Column()
   public thumb!: string;
 
+  @Field()
   @Column()
   public alcoholic!: string;
 
+  @Field()
   @Column()
   public glass!: string;
 
+  @Field(() => [Measure])
   @OneToMany(() => Measure, (ingredient) => ingredient.cocktail)
   public measures!: Measure[];
 
-  @Column({
-    nullable: true,
-  })
+  @Field(nullable)
+  @Column(nullable)
   public category?: string;
 
-  @Column({
-    nullable: true,
-  })
+  @Field(nullable)
+  @Column(nullable)
   public video?: string;
 
-  @Column({
-    nullable: true,
-  })
+  @Field(nullable)
+  @Column(nullable)
   public tags?: string;
 
+  @Field()
   @Column('text')
   public instructions?: string;
 
+  @Field(nullable)
   @Column({
-    nullable: true,
+    ...nullable,
     type: 'text',
   })
   public instructionsES?: string;
 
+  @Field(nullable)
   @Column({
-    nullable: true,
+    ...nullable,
     type: 'text',
   })
   public instructionsDE?: string;
 
+  @Field(nullable)
   @Column({
-    nullable: true,
+    ...nullable,
     type: 'text',
   })
   public instructionsFR?: string;
 
+  @Field(nullable)
   @Column({
-    nullable: true,
+    ...nullable,
     type: 'text',
   })
   public instructionsIT?: string;
 
+  @Field(nullable)
   @Column({
-    nullable: true,
+    ...nullable,
     type: 'text',
   })
   public instructionsPtBR?: string;
 
-  @Column({
-    nullable: true,
-  })
+  @Field(nullable)
+  @Column(nullable)
   public dateModified?: string;
 
-  @Column({
-    nullable: true,
-  })
+  @Field(nullable)
+  @Column(nullable)
   public iba?: string;
 
   constructor(props?: Cocktail) {

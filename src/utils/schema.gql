@@ -13,6 +13,51 @@ input ChangePassword {
   oldPassword: String!
 }
 
+type Cocktail {
+  alcoholic: String!
+  category: String
+  dateModified: String
+  glass: String!
+  iba: String
+  id: String!
+  instructions: String!
+  instructionsDE: String
+  instructionsES: String
+  instructionsFR: String
+  instructionsIT: String
+  instructionsPtBR: String
+  measures: [Measure!]!
+  name: String!
+  tags: String
+  thumb: String!
+  video: String
+}
+
+input CocktailQuery {
+  """filter by alcoholic"""
+  a: String
+
+  """filter by category"""
+  c: String
+
+  """filter by glass"""
+  g: String
+
+  """filter by ingredients"""
+  i: String
+}
+
+type Ingredient {
+  id: String
+  name: String!
+}
+
+type Measure {
+  id: String!
+  ingredient: Ingredient!
+  measure: String
+}
+
 type Mutation {
   changeUserPassword(payload: ChangePassword!): String!
   createUser(newUser: NewUser!): AuthUserResponse!
@@ -28,6 +73,7 @@ input NewUser {
 
 type Query {
   authenticateUser(email: String!, password: String!): AuthUserResponse!
+  getCocktails(query: CocktailQuery!): [Cocktail!]!
   hello: String!
   refreshUserToken: AuthUserResponse!
 }

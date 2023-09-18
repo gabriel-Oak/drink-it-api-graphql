@@ -1,8 +1,13 @@
 import { Axios, AxiosRequestConfig } from 'axios';
+import { inject } from 'inversify';
 import { IHttpService } from './types';
+import Injectable from '../../decorators/injectable';
 
+@Injectable('IHttpService')
 export default class HttpService implements IHttpService {
-  constructor(private readonly client: Axios) { }
+  constructor(
+    @inject('Axios') private readonly client: Axios,
+  ) { }
 
   async get<T>(url: string, config?: AxiosRequestConfig) {
     const { data } = await this.client.get<T>(url, config);
