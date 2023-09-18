@@ -41,7 +41,7 @@ describe('GetCocktailsUsecase Tests', () => {
     expect((result as Right<unknown>).success).toBeInstanceOf(Array<Cocktail>);
   });
 
-  it.skip('Should get full cocktails list from cache', async () => {
+  it('Should get full cocktails list from cache', async () => {
     cacheServiceMock.get.mockImplementation(async () => [cocktailMock]);
     const result = await usecase.execute({ i: 'vodka' });
 
