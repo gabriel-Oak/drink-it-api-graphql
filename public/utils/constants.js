@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.JWT_SECRET = exports.REDIS_PASS = exports.REDIS_HOST = exports.REDIS_PORT = exports.POSTGRE_DB = exports.POSTGRE_PORT = exports.POSTGRE_PASS = exports.POSTGRE_USER = exports.POSTGRE_HOST = exports.TRANSLATE_API_KEY = exports.TRANSLATE_API = exports.COCKTAIL_API = void 0;
+exports.COCKTAIL_API = process.env.COCKTAIL_API;
+exports.TRANSLATE_API = process.env.TRANSLATE_API;
+exports.TRANSLATE_API_KEY = process.env.TRANSLATE_API_KEY;
+exports.POSTGRE_HOST = process.env.POSTGRE_HOST;
+exports.POSTGRE_USER = process.env.POSTGRE_USER;
+exports.POSTGRE_PASS = process.env.POSTGRE_PASS;
+exports.POSTGRE_PORT = process.env.POSTGRE_PORT;
+exports.POSTGRE_DB = process.env.POSTGRE_DB;
+exports.REDIS_PORT = process.env.REDIS_PORT;
+exports.REDIS_HOST = process.env.REDIS_HOST;
+exports.REDIS_PASS = process.env.REDIS_PASS;
+exports.JWT_SECRET = process.env.JWT_SECRET;

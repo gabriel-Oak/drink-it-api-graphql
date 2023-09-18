@@ -3,3 +3,5 @@
 
 npm run lint
 npm run coverage
+npm run build
+git add --force
