@@ -1,15 +1,24 @@
 import { ContextFunction } from '@apollo/server';
 import { StandaloneServerContextFunctionArgument } from '@apollo/server/dist/esm/standalone';
+import { LambdaContextFunctionArgument, handlers } from '@as-integrations/aws-lambda';
+import {
+  APIGatewayProxyEventV2, APIGatewayProxyStructuredResultV2,
+} from 'aws-lambda';
 import IContext from './types';
 import createContainer from '../../decorators/container';
 import { IDecodeUserTokenUsecase } from '../../../features/users/usecases/decode-user-token/types';
 import User from '../../../features/users/entities/user';
 import HttpError from '../../errors/http-error';
 
-const context = async ({ req }: StandaloneServerContextFunctionArgument) => {
+const context = async ({
+  req, event,
+}: StandaloneServerContextFunctionArgument & LambdaContextFunctionArgument<
+  handlers.RequestHandler<APIGatewayProxyEventV2, APIGatewayProxyStructuredResultV2>
+>) => {
   let user: User | undefined;
   let authError: HttpError | undefined;
-  const token = req.headers.authorization;
+  const { headers } = req || event;
+  const token = headers.authorization;
 
   if (token) {
     const container = createContainer();
@@ -24,7 +33,7 @@ const context = async ({ req }: StandaloneServerContextFunctionArgument) => {
   }
 
   return {
-    headers: req.headers,
+    headers,
     user,
     authError,
   }

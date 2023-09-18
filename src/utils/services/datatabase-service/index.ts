@@ -26,20 +26,19 @@ const DatabaseService = new DataSource({
 });
 const logger = createContainer().get<ILoggerService>('ILoggerService');
 
-const initDB = () => {
+export const initDB = async () => {
   logger.info('Initializing connection with database');
-  DatabaseService.initialize()
+  await DatabaseService.initialize()
     .then(() => logger.info('Database initialized successfuly'))
     .catch((error) => {
       logger.error('Database initialize error', error);
-      logger.warn('Trying to reconnect in 5m');
-      setTimeout(() => {
-        initDB();
-      }, 5000);
+      // logger.warn('Trying to reconnect in 5m');
+      // setTimeout(() => {
+      //   initDB();
+      // }, 5000);
     });
 };
 
-initDB();
 createContainer().bind<Repository<CocktailIngredient>>('Repository<Measure>')
   .toDynamicValue(() => DatabaseService.getRepository(CocktailIngredient));
 createContainer().bind<Repository<Ingredient>>('Repository<Ingredient>')

@@ -1,7 +1,7 @@
 import { Either } from '../../../../utils/types';
 import { CocktailDatasourceError } from '../../datasources/external-datasource/types'
-import Cocktail from '../../models/cocktail';
-import { getCocktailsQuery } from '../../models/get-cocktails';
+import Cocktail from '../../entities/cocktail';
+import { getCocktailsQuery } from '../../entities/get-cocktails';
 
 export type getCocktailsUsecaseErrors = CocktailDatasourceError;
 
