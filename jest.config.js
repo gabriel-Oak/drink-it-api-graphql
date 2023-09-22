@@ -18,4 +18,8 @@ module.exports = {
   setupFiles: [
     '<rootDir>/jest.global.js',
   ],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/dist/',
+  ],
 };

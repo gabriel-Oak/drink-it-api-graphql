@@ -10,19 +10,23 @@ import HttpError from '../../../../utils/errors/http-error';
 import { CocktailDatasourceError } from '../../datasources/external-datasource/types';
 import '../../entities/measure';
 import { GetDetailsValidationError, IGetDetailsUsecase } from '../../usecases/get-details/type';
+import { IGetRandomUsecase, RandomNotFoundError } from '../../usecases/get-random/types';
 
 describe('CocktailResolver Tests', () => {
   const getCocktailsMock = mock<IGetCocktailsUsecase>();
   const getDetailsMock = mock<IGetDetailsUsecase>();
+  const getRandomMock = mock<IGetRandomUsecase>();
   const resolver: ICocktailResolver = new CocktailResolver(
     getCocktailsMock,
     getDetailsMock,
+    getRandomMock,
   );
   const successMock = [Cocktail.fromSource(cocktailDetailMock as any)];
 
   beforeEach(() => {
     mockReset(getCocktailsMock);
     mockReset(getDetailsMock);
+    mockReset(getRandomMock);
   });
 
   it('Should return cocktails', async () => {
@@ -77,6 +81,25 @@ describe('CocktailResolver Tests', () => {
     expect(result).toEqual(new HttpError({
       statusCode: 400,
       message: 'Sorry, you need to specify a cocktail id to search',
+    }));
+  });
+
+  it('Should return cocktail random', async () => {
+    getRandomMock.execute
+      .mockImplementation(async () => new Right(Cocktail.fromSource(cocktailDetailMock as any)));
+    const result = await resolver.getRandomCocktail();
+
+    expect(result).toEqual(Cocktail.fromSource(cocktailDetailMock as any));
+  });
+
+  it('Should return random cocktail error', async () => {
+    getRandomMock.execute
+      .mockImplementation(async () => new Left(new RandomNotFoundError()));
+    const result = await resolver.getRandomCocktail();
+
+    expect(result).toEqual(new HttpError({
+      statusCode: 500,
+      message: 'Sorry, couldn\'t find you a random cocktail now',
     }));
   });
 });

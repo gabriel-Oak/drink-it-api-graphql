@@ -7,6 +7,7 @@ import { IGetCocktailsUsecase } from '../../usecases/get-cocktails/types';
 import HttpError from '../../../../utils/errors/http-error';
 import { getCocktailsQuery } from '../../entities/get-cocktails';
 import { IGetDetailsUsecase } from '../../usecases/get-details/type';
+import { IGetRandomUsecase } from '../../usecases/get-random/types';
 
 @Resolver()
 export default class CocktailResolver implements ICocktailResolver {
@@ -15,6 +16,8 @@ export default class CocktailResolver implements ICocktailResolver {
     private readonly getCocktailsUsecase: IGetCocktailsUsecase,
     @inject('IGetDetailsUsecase')
     private readonly getDetailUsecase: IGetDetailsUsecase,
+    @inject('IGetRandomUsecase')
+    private readonly getRandomUsecase: IGetRandomUsecase,
   ) { }
 
   @Query(() => [Cocktail])
@@ -41,5 +44,13 @@ export default class CocktailResolver implements ICocktailResolver {
       ...result.error,
       statusCode: result.error.type === 'get-detail-validation' ? 400 : 500,
     });
+  }
+
+  @Query(() => Cocktail)
+  async getRandomCocktail() {
+    const result = await this.getRandomUsecase.execute();
+    if (result.isSuccess) return result.success;
+
+    return new HttpError(result.error);
   }
 }

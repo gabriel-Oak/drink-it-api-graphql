@@ -8,6 +8,7 @@ import Cocktail from '../../entities/cocktail';
 import {
   GetCocktailDetailsResponse,
   GetCocktailsListResponse,
+  GetRandomCocktailResponse,
   getCocktailsQuery,
 } from '../../entities/get-cocktails';
 import { CocktailDatasourceError, ICocktailExternalDatasource } from './types';
@@ -49,6 +50,21 @@ export default class CocktailExternalDatasource implements ICocktailExternalData
       const error = new CocktailDatasourceError(
         'Something wen wrong consulting cocktails service',
         { error: e, cocktailId },
+      );
+      this.logger.error(error.message, error);
+      return new Left(error);
+    }
+  }
+
+  async getRamdomCocktail() {
+    try {
+      const result = await this.httpService.get<GetRandomCocktailResponse>(`${COCKTAIL_API}/random.php`);
+
+      return new Right(Cocktail.fromSource(result.drinks?.[0]));
+    } catch (e) {
+      const error = new CocktailDatasourceError(
+        'Something wen wrong consulting cocktails service',
+        { error: e },
       );
       this.logger.error(error.message, error);
       return new Left(error);

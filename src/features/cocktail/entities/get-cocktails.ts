@@ -8,11 +8,16 @@ export type cocktailList = Array<{
   idDrink: string;
 }>
 
+export interface GetCocktailsListResponse {
+  drinks: cocktailList;
+}
+
 export interface GetCocktailDetailsResponse {
   drinks: CocktailFromSourceProps[] | null;
 }
-export interface GetCocktailsListResponse {
-  drinks: cocktailList;
+
+export interface GetRandomCocktailResponse {
+  drinks: CocktailFromSourceProps[];
 }
 
 export type getCocktailsQuery = {

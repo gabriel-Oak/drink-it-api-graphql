@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { mock, mockReset } from 'jest-mock-extended';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import Cocktail from '../../entities/cocktail';
 import InternalCocktailDatasource from './internal-datasource';
 import { IInternalCocktailDatasource, InternalCocktailDatasourceError } from './types';
@@ -16,6 +16,7 @@ describe('InternalCocktailDatasource Tests', () => {
   const ingredientRepositoryMock = mock<Repository<Ingredient>>();
   const loggerMock = mock<ILoggerService>();
   const cocktailMock = Cocktail.fromSource(cocktailDetailMock as any);
+  const queryBuilder = mock<SelectQueryBuilder<Cocktail>>();
 
   const datasource: IInternalCocktailDatasource = new InternalCocktailDatasource(
     cocktailRepositoryMock,
@@ -29,6 +30,12 @@ describe('InternalCocktailDatasource Tests', () => {
     mockReset(measureRepositoryMock);
     mockReset(ingredientRepositoryMock);
     mockReset(loggerMock);
+    mockReset(queryBuilder);
+
+    queryBuilder.leftJoinAndSelect.mockReturnThis();
+    queryBuilder.select.mockReturnThis();
+    queryBuilder.orderBy.mockReturnThis();
+    cocktailRepositoryMock.createQueryBuilder.mockReturnValue(queryBuilder);
   });
 
   it('Should save cocktail', async () => {
@@ -94,6 +101,22 @@ describe('InternalCocktailDatasource Tests', () => {
   it('Should deal with finding many errors', async () => {
     cocktailRepositoryMock.find.mockRejectedValue(Error('Crap you to beaultiful for this'));
     const result = await datasource.findMany(['7382']);
+
+    expect(result).toBeInstanceOf(Left);
+    expect((result as Left<unknown>).error).toBeInstanceOf(InternalCocktailDatasourceError);
+  });
+
+  it('Should find random cocktail', async () => {
+    queryBuilder.getOne.mockImplementation(async () => cocktailMock);
+    const result = await datasource.findRandom();
+
+    expect(result).toBeInstanceOf(Right);
+    expect((result as Right<unknown>).success).toBeInstanceOf(Cocktail);
+  });
+
+  it('Should deal with finding random errors', async () => {
+    queryBuilder.getOne.mockRejectedValue(Error('Crap you to beaultiful for this'));
+    const result = await datasource.findRandom();
 
     expect(result).toBeInstanceOf(Left);
     expect((result as Left<unknown>).error).toBeInstanceOf(InternalCocktailDatasourceError);

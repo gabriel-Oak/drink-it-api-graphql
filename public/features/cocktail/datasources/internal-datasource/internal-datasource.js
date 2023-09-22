@@ -95,6 +95,25 @@ let InternalCocktailDatasource = class InternalCocktailDatasource {
             return new types_1.Left(error);
         }
     }
+    async findRandom() {
+        try {
+            const cocktail = await this.cocktailRepository
+                .createQueryBuilder('cocktail')
+                .leftJoinAndSelect('cocktail.measures', 'measure')
+                .leftJoinAndSelect('measure.ingredient', 'ingredient')
+                .select()
+                .orderBy('RANDOM()')
+                .getOne();
+            return new types_1.Right(cocktail);
+        }
+        catch (e) {
+            const error = new types_2.InternalCocktailDatasourceError(e.message ?? 'Someting went search cocktail', {
+                error: e,
+            });
+            this.logger.error(error.message, error);
+            return new types_1.Left(error);
+        }
+    }
 };
 InternalCocktailDatasource = __decorate([
     (0, injectable_1.default)('IInternalCocktailDatasource'),

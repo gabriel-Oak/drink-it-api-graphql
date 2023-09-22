@@ -88,4 +88,23 @@ export default class InternalCocktailDatasource implements IInternalCocktailData
       return new Left(error);
     }
   }
+
+  async findRandom() {
+    try {
+      const cocktail = await this.cocktailRepository
+        .createQueryBuilder('cocktail')
+        .leftJoinAndSelect('cocktail.measures', 'measure')
+        .leftJoinAndSelect('measure.ingredient', 'ingredient')
+        .select()
+        .orderBy('RANDOM()')
+        .getOne();
+      return new Right(cocktail);
+    } catch (e) {
+      const error = new InternalCocktailDatasourceError((e as IError).message ?? 'Someting went search cocktail', {
+        error: e,
+      });
+      this.logger.error(error.message, error);
+      return new Left(error);
+    }
+  }
 }

@@ -75,7 +75,6 @@ type Query {
   authenticateUser(email: String!, password: String!): AuthUserResponse!
   getCocktailDetail(cocktailId: String!): Cocktail!
   getCocktails(query: CocktailQuery!): [Cocktail!]!
-  getRandomCocktail: Cocktail!
   hello: String!
   refreshUserToken: AuthUserResponse!
 }

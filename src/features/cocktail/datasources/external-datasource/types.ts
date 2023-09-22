@@ -7,6 +7,10 @@ export class CocktailDatasourceError extends BaseError {
   public readonly type = 'coktail-datasource';
 }
 
+export interface RandomResult {
+  drinks: CocktailDatasourceError[];
+}
+
 export interface ICocktailExternalDatasource {
   getCocktailsList: (
     query: getCocktailsQuery
@@ -14,4 +18,5 @@ export interface ICocktailExternalDatasource {
   getCocktailDetail: (
     cocktailId: string
   ) => Promise<Either<CocktailDatasourceError, Cocktail | null>>;
+  getRamdomCocktail: () => Promise<Either<CocktailDatasourceError, Cocktail>>;
 }
