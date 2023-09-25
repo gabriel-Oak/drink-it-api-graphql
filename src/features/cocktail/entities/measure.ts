@@ -12,7 +12,6 @@ const nullable = {
 @Entity()
 @ObjectType()
 export default class Measure {
-  @Field()
   @PrimaryGeneratedColumn('uuid')
   public id?: string;
 

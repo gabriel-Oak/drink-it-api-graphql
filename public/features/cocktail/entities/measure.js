@@ -25,7 +25,6 @@ let Measure = class Measure {
     }
 };
 __decorate([
-    (0, type_graphql_1.Field)(),
     (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
     __metadata("design:type", String)
 ], Measure.prototype, "id", void 0);
