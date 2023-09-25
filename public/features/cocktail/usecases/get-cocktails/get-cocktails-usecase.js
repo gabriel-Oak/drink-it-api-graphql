@@ -69,7 +69,7 @@ let GetCocktailsUsecase = class GetCocktailsUsecase {
         const listResult = await this.externalDatasource.getCocktailsList(query);
         if (listResult.isError)
             return listResult;
-        const cocktails = await this.getDetails(listResult.success);
+        const cocktails = await this.getDetails(listResult.success || []);
         this.cacheService.set(`cocktail:list:${encodedQuery}`, cocktails);
         return new types_1.Right(cocktails);
     }

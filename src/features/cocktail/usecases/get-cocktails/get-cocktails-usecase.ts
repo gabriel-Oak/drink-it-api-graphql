@@ -66,12 +66,13 @@ export default class GetCocktailsUsecase implements IGetCocktailsUsecase {
   async execute(query: getCocktailsQuery) {
     const encodedQuery = `${Object.keys(query)[0]}${encodeURIComponent(Object.values(query)[0])}`;
     const cache = await this.cacheService.get<Cocktail[]>(`cocktail:list:${encodedQuery}`);
+
     if (cache) return new Right(cache);
 
     const listResult = await this.externalDatasource.getCocktailsList(query);
     if (listResult.isError) return listResult;
 
-    const cocktails: Cocktail[] = await this.getDetails(listResult.success);
+    const cocktails: Cocktail[] = await this.getDetails(listResult.success || []);
 
     this.cacheService.set(`cocktail:list:${encodedQuery}`, cocktails);
     return new Right(cocktails);
