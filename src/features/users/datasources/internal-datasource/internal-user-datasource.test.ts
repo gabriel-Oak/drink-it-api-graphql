@@ -11,15 +11,27 @@ describe('InternalUserDatasource Tests', () => {
   const repositoryMock = mock<Repository<User>>();
   const loggerMock = mock<ILoggerService>();
   const userMock = new User();
+  const initDBMock = jest.fn();
 
   const datasource: IInternalUserDatasource = new InternalUserDatasource(
     repositoryMock,
     loggerMock,
+    initDBMock,
   );
 
   beforeEach(() => {
     mockReset(repositoryMock);
     mockReset(loggerMock);
+    initDBMock.mockReset();
+
+    initDBMock.mockImplementation(async () => true);
+  });
+
+  it('Should error connection on find user by email', async () => {
+    initDBMock.mockImplementation(async () => false);
+    const result = await datasource.findByEmail('hiremexteamplsohmygod@gmaiu.com');
+
+    expect(result).toBeInstanceOf(Left);
   });
 
   it('Should find user by email', async () => {
@@ -60,6 +72,13 @@ describe('InternalUserDatasource Tests', () => {
     expect((result as Left<unknown>).error).toBeInstanceOf(InternalUserDatasourceError);
   });
 
+  it('Should error connection on find user by id', async () => {
+    initDBMock.mockImplementation(async () => false);
+    const result = await datasource.findById('hiremexteamplsohmygod@gmaiu.com');
+
+    expect(result).toBeInstanceOf(Left);
+  });
+
   it('Should find user by id', async () => {
     repositoryMock.findOneBy.mockImplementation(async () => userMock);
     const result = await datasource.findById('hiremexteamplsohmygod@gmaiu.com');
@@ -74,6 +93,13 @@ describe('InternalUserDatasource Tests', () => {
 
     expect(result).toBeInstanceOf(Left);
     expect((result as Left<unknown>).error).toBeInstanceOf(InternalUserDatasourceError);
+  });
+
+  it('Should error connection on save user', async () => {
+    initDBMock.mockImplementation(async () => false);
+    const result = await datasource.save(userMock);
+
+    expect(result).toBeInstanceOf(Left);
   });
 
   it('Should save user', async () => {
@@ -92,6 +118,13 @@ describe('InternalUserDatasource Tests', () => {
     expect((result as Left<unknown>).error).toBeInstanceOf(InternalUserDatasourceError);
   });
 
+  it('Should error connection on update user', async () => {
+    initDBMock.mockImplementation(async () => false);
+    const result = await datasource.update(userMock);
+
+    expect(result).toBeInstanceOf(Left);
+  });
+
   it('Should update user', async () => {
     repositoryMock.update.mockImplementation(async () => null as any);
     const result = await datasource.update(userMock);
@@ -105,6 +138,13 @@ describe('InternalUserDatasource Tests', () => {
 
     expect(result).toBeInstanceOf(Left);
     expect((result as Left<unknown>).error).toBeInstanceOf(InternalUserDatasourceError);
+  });
+
+  it('Should error connection on remove user', async () => {
+    initDBMock.mockImplementation(async () => false);
+    const result = await datasource.remove('hsiuhdiusadhiudas-iasdhaishdi-haisdhiuash');
+
+    expect(result).toBeInstanceOf(Left);
   });
 
   it('Should remove user', async () => {

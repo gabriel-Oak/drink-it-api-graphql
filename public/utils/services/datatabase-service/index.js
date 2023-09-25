@@ -26,26 +26,28 @@ const DatabaseService = new typeorm_1.DataSource({
     ],
     synchronize: true,
 });
-const logger = (0, container_1.default)().get('ILoggerService');
 const initDB = async () => {
-    logger.info('Initializing connection with database');
-    await DatabaseService.initialize()
-        .then(() => logger.info('Database initialized successfuly'))
-        .catch((error) => {
-        logger.error('Database initialize error', error);
-        // logger.warn('Trying to reconnect in 5m');
-        // setTimeout(() => {
-        //   initDB();
-        // }, 5000);
-    });
+    if (!DatabaseService.isInitialized) {
+        const logger = (0, container_1.default)().get('ILoggerService');
+        logger.info('Initializing connection with database');
+        await DatabaseService.initialize()
+            .then(() => logger.info('Database initialized successfuly'))
+            .catch((error) => {
+            logger.error('Database initialize error: ', error);
+        });
+    }
+    return DatabaseService.isInitialized;
 };
 exports.initDB = initDB;
-(0, container_1.default)().bind('Repository<Measure>')
+const container = (0, container_1.default)();
+container.bind('Repository<Measure>')
     .toDynamicValue(() => DatabaseService.getRepository(measure_1.default));
-(0, container_1.default)().bind('Repository<Ingredient>')
+container.bind('Repository<Ingredient>')
     .toDynamicValue(() => DatabaseService.getRepository(ingredient_1.default));
-(0, container_1.default)().bind('Repository<Cocktail>')
+container.bind('Repository<Cocktail>')
     .toDynamicValue(() => DatabaseService.getRepository(cocktail_1.default));
-(0, container_1.default)().bind('Repository<User>')
+container.bind('Repository<User>')
     .toDynamicValue(() => DatabaseService.getRepository(user_1.default));
+container.bind('DataSource').toDynamicValue(() => DatabaseService);
+container.bind('initDB').toDynamicValue(() => exports.initDB);
 exports.default = DatabaseService;

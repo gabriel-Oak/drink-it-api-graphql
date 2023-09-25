@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { inject } from 'inversify';
-import { Left, Right } from '../../../../utils/types';
+import { Either, Left, Right } from '../../../../utils/types';
 import User from '../../entities/user';
 import { IInternalUserDatasource, InternalUserDatasourceError } from './types';
 import Injectable from '../../../../utils/decorators/injectable';
@@ -12,9 +12,30 @@ export default class InternalUserDatasource implements IInternalUserDatasource {
   constructor(
     @inject('Repository<User>') private readonly userRepository: Repository<User>,
     @inject('ILoggerService') private readonly logger: ILoggerService,
+    @inject('initDB') private readonly initDB: () => Promise<boolean>,
   ) { }
 
+  private async connect(
+    tries = 0,
+  ): Promise<Either<InternalUserDatasourceError, null>> {
+    if (tries === 10) {
+      return new Left(
+        new InternalUserDatasourceError('Couldn\'t connect the database after 10 tries'),
+      );
+    }
+
+    const initialized = await new Promise<boolean>((r) => {
+      setTimeout(() => {
+        this.initDB().then(r);
+      }, 1000);
+    });
+    return initialized ? new Right(null) : this.connect(tries + 1);
+  }
+
   async findByEmail(email: string) {
+    const connectionResult = await this.connect();
+    if (connectionResult.isError) return connectionResult;
+
     try {
       const user = await this.userRepository.findOneBy({ email });
       return new Right(user);
@@ -29,6 +50,9 @@ export default class InternalUserDatasource implements IInternalUserDatasource {
   }
 
   async findByEmailOrUsername(query: { username: string; email: string; }) {
+    const connectionResult = await this.connect();
+    if (connectionResult.isError) return connectionResult;
+
     try {
       const user = await this.userRepository.findOneBy([
         { email: query.email },
@@ -47,6 +71,9 @@ export default class InternalUserDatasource implements IInternalUserDatasource {
   }
 
   async findById(userId: string) {
+    const connectionResult = await this.connect();
+    if (connectionResult.isError) return connectionResult;
+
     try {
       const user = await this.userRepository.findOneBy({ id: userId });
       return new Right(user);
@@ -61,6 +88,9 @@ export default class InternalUserDatasource implements IInternalUserDatasource {
   }
 
   async save(user: User) {
+    const connectionResult = await this.connect();
+    if (connectionResult.isError) return connectionResult;
+
     try {
       const result = await this.userRepository.save(user);
       delete result.password;
@@ -76,6 +106,9 @@ export default class InternalUserDatasource implements IInternalUserDatasource {
   }
 
   async update(user: User) {
+    const connectionResult = await this.connect();
+    if (connectionResult.isError) return connectionResult;
+
     try {
       await this.userRepository.update(user.id!, user);
       return new Right(null);
@@ -90,6 +123,9 @@ export default class InternalUserDatasource implements IInternalUserDatasource {
   }
 
   async remove(userId: string) {
+    const connectionResult = await this.connect();
+    if (connectionResult.isError) return connectionResult;
+
     try {
       const user = await this.userRepository.findOneBy({ id: userId });
       if (!user) throw new Error(`Oops, user ${userId} not found, might be already deleted`);

@@ -24,28 +24,31 @@ const DatabaseService = new DataSource({
   ],
   synchronize: true,
 });
-const logger = createContainer().get<ILoggerService>('ILoggerService');
 
 export const initDB = async () => {
-  logger.info('Initializing connection with database');
-  await DatabaseService.initialize()
-    .then(() => logger.info('Database initialized successfuly'))
-    .catch((error) => {
-      logger.error('Database initialize error', error);
-      // logger.warn('Trying to reconnect in 5m');
-      // setTimeout(() => {
-      //   initDB();
-      // }, 5000);
-    });
+  if (!DatabaseService.isInitialized) {
+    const logger = createContainer().get<ILoggerService>('ILoggerService');
+    logger.info('Initializing connection with database');
+    await DatabaseService.initialize()
+      .then(() => logger.info('Database initialized successfuly'))
+      .catch((error) => {
+        logger.error('Database initialize error: ', error);
+      });
+  }
+  return DatabaseService.isInitialized;
 };
 
-createContainer().bind<Repository<CocktailIngredient>>('Repository<Measure>')
+const container = createContainer();
+
+container.bind<Repository<CocktailIngredient>>('Repository<Measure>')
   .toDynamicValue(() => DatabaseService.getRepository(CocktailIngredient));
-createContainer().bind<Repository<Ingredient>>('Repository<Ingredient>')
+container.bind<Repository<Ingredient>>('Repository<Ingredient>')
   .toDynamicValue(() => DatabaseService.getRepository(Ingredient));
-createContainer().bind<Repository<Cocktail>>('Repository<Cocktail>')
+container.bind<Repository<Cocktail>>('Repository<Cocktail>')
   .toDynamicValue(() => DatabaseService.getRepository(Cocktail));
-createContainer().bind<Repository<User>>('Repository<User>')
+container.bind<Repository<User>>('Repository<User>')
   .toDynamicValue(() => DatabaseService.getRepository(User));
+container.bind<DataSource>('DataSource').toDynamicValue(() => DatabaseService);
+container.bind<() => Promise<boolean>>('initDB').toDynamicValue(() => initDB);
 
 export default DatabaseService;

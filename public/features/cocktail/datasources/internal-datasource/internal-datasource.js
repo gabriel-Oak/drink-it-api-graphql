@@ -22,13 +22,28 @@ const measure_1 = __importDefault(require("../../entities/measure"));
 const types_2 = require("./types");
 const injectable_1 = __importDefault(require("../../../../utils/decorators/injectable"));
 let InternalCocktailDatasource = class InternalCocktailDatasource {
-    constructor(cocktailRepository, measureRepository, ingredientRepository, logger) {
+    constructor(cocktailRepository, measureRepository, ingredientRepository, logger, initDB) {
         this.cocktailRepository = cocktailRepository;
         this.measureRepository = measureRepository;
         this.ingredientRepository = ingredientRepository;
         this.logger = logger;
+        this.initDB = initDB;
+    }
+    async connect(tries = 0) {
+        if (tries === 10) {
+            return new types_1.Left(new types_2.InternalCocktailDatasourceError('Couldn\'t connect the database after 10 tries'));
+        }
+        const initialized = await new Promise((r) => {
+            setTimeout(() => {
+                this.initDB().then(r);
+            }, 1000);
+        });
+        return initialized ? new types_1.Right(null) : this.connect(tries + 1);
     }
     async saveOne(cocktail) {
+        const connectionResult = await this.connect();
+        if (connectionResult.isError)
+            return connectionResult;
         try {
             const cocktailExists = await this.cocktailRepository.findOne({ where: { id: cocktail.id } });
             if (!cocktailExists)
@@ -60,6 +75,9 @@ let InternalCocktailDatasource = class InternalCocktailDatasource {
         }
     }
     async findOne(cocktailId) {
+        const connectionResult = await this.connect();
+        if (connectionResult.isError)
+            return connectionResult;
         try {
             const cocktail = await this.cocktailRepository.findOne({
                 where: { id: cocktailId },
@@ -77,6 +95,9 @@ let InternalCocktailDatasource = class InternalCocktailDatasource {
         }
     }
     async findMany(cocktailsIds) {
+        const connectionResult = await this.connect();
+        if (connectionResult.isError)
+            return connectionResult;
         try {
             const cocktails = await this.cocktailRepository.find({
                 where: {
@@ -96,6 +117,9 @@ let InternalCocktailDatasource = class InternalCocktailDatasource {
         }
     }
     async findRandom() {
+        const connectionResult = await this.connect();
+        if (connectionResult.isError)
+            return connectionResult;
         try {
             const cocktail = await this.cocktailRepository
                 .createQueryBuilder('cocktail')
@@ -121,8 +145,9 @@ InternalCocktailDatasource = __decorate([
     __param(1, (0, inversify_1.inject)('Repository<Measure>')),
     __param(2, (0, inversify_1.inject)('Repository<Ingredient>')),
     __param(3, (0, inversify_1.inject)('ILoggerService')),
+    __param(4, (0, inversify_1.inject)('initDB')),
     __metadata("design:paramtypes", [typeorm_1.Repository,
         typeorm_1.Repository,
-        typeorm_1.Repository, Object])
+        typeorm_1.Repository, Object, Function])
 ], InternalCocktailDatasource);
 exports.default = InternalCocktailDatasource;

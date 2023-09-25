@@ -17,12 +17,14 @@ describe('InternalCocktailDatasource Tests', () => {
   const loggerMock = mock<ILoggerService>();
   const cocktailMock = Cocktail.fromSource(cocktailDetailMock as any);
   const queryBuilder = mock<SelectQueryBuilder<Cocktail>>();
+  const initDBMock = jest.fn();
 
   const datasource: IInternalCocktailDatasource = new InternalCocktailDatasource(
     cocktailRepositoryMock,
     measureRepositoryMock,
     ingredientRepositoryMock,
     loggerMock,
+    initDBMock,
   );
 
   beforeEach(() => {
@@ -31,11 +33,20 @@ describe('InternalCocktailDatasource Tests', () => {
     mockReset(ingredientRepositoryMock);
     mockReset(loggerMock);
     mockReset(queryBuilder);
+    initDBMock.mockReset();
 
+    initDBMock.mockImplementation(async () => true);
     queryBuilder.leftJoinAndSelect.mockReturnThis();
     queryBuilder.select.mockReturnThis();
     queryBuilder.orderBy.mockReturnThis();
     cocktailRepositoryMock.createQueryBuilder.mockReturnValue(queryBuilder);
+  });
+
+  it('Should error connection on save cocktail', async () => {
+    initDBMock.mockImplementation(async () => false);
+    const result = await datasource.saveOne(cocktailMock);
+
+    expect(result).toBeInstanceOf(Left);
   });
 
   it('Should save cocktail', async () => {
@@ -74,6 +85,13 @@ describe('InternalCocktailDatasource Tests', () => {
     expect((result as Left<unknown>).error).toBeInstanceOf(InternalCocktailDatasourceError);
   });
 
+  it('Should error connection on find one cocktail', async () => {
+    initDBMock.mockImplementation(async () => false);
+    const result = await datasource.findOne('7382');
+
+    expect(result).toBeInstanceOf(Left);
+  });
+
   it('Should find one cocktail', async () => {
     cocktailRepositoryMock.findOne.mockImplementation(async () => cocktailMock);
     const result = await datasource.findOne('7382');
@@ -90,6 +108,13 @@ describe('InternalCocktailDatasource Tests', () => {
     expect((result as Left<unknown>).error).toBeInstanceOf(InternalCocktailDatasourceError);
   });
 
+  it('Should error connection on find may cocktails', async () => {
+    initDBMock.mockImplementation(async () => false);
+    const result = await datasource.findMany(['7382']);
+
+    expect(result).toBeInstanceOf(Left);
+  });
+
   it('Should find may cocktails', async () => {
     cocktailRepositoryMock.find.mockImplementation(async () => [cocktailMock]);
     const result = await datasource.findMany(['7382']);
@@ -104,6 +129,13 @@ describe('InternalCocktailDatasource Tests', () => {
 
     expect(result).toBeInstanceOf(Left);
     expect((result as Left<unknown>).error).toBeInstanceOf(InternalCocktailDatasourceError);
+  });
+
+  it('Should error connection on find random cocktail', async () => {
+    initDBMock.mockImplementation(async () => false);
+    const result = await datasource.findRandom();
+
+    expect(result).toBeInstanceOf(Left);
   });
 
   it('Should find random cocktail', async () => {

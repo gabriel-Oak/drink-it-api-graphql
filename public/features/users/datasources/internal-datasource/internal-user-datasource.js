@@ -21,11 +21,26 @@ const types_1 = require("../../../../utils/types");
 const types_2 = require("./types");
 const injectable_1 = __importDefault(require("../../../../utils/decorators/injectable"));
 let InternalUserDatasource = class InternalUserDatasource {
-    constructor(userRepository, logger) {
+    constructor(userRepository, logger, initDB) {
         this.userRepository = userRepository;
         this.logger = logger;
+        this.initDB = initDB;
+    }
+    async connect(tries = 0) {
+        if (tries === 10) {
+            return new types_1.Left(new types_2.InternalUserDatasourceError('Couldn\'t connect the database after 10 tries'));
+        }
+        const initialized = await new Promise((r) => {
+            setTimeout(() => {
+                this.initDB().then(r);
+            }, 1000);
+        });
+        return initialized ? new types_1.Right(null) : this.connect(tries + 1);
     }
     async findByEmail(email) {
+        const connectionResult = await this.connect();
+        if (connectionResult.isError)
+            return connectionResult;
         try {
             const user = await this.userRepository.findOneBy({ email });
             return new types_1.Right(user);
@@ -37,6 +52,9 @@ let InternalUserDatasource = class InternalUserDatasource {
         }
     }
     async findByEmailOrUsername(query) {
+        const connectionResult = await this.connect();
+        if (connectionResult.isError)
+            return connectionResult;
         try {
             const user = await this.userRepository.findOneBy([
                 { email: query.email },
@@ -52,6 +70,9 @@ let InternalUserDatasource = class InternalUserDatasource {
         }
     }
     async findById(userId) {
+        const connectionResult = await this.connect();
+        if (connectionResult.isError)
+            return connectionResult;
         try {
             const user = await this.userRepository.findOneBy({ id: userId });
             return new types_1.Right(user);
@@ -63,6 +84,9 @@ let InternalUserDatasource = class InternalUserDatasource {
         }
     }
     async save(user) {
+        const connectionResult = await this.connect();
+        if (connectionResult.isError)
+            return connectionResult;
         try {
             const result = await this.userRepository.save(user);
             delete result.password;
@@ -75,6 +99,9 @@ let InternalUserDatasource = class InternalUserDatasource {
         }
     }
     async update(user) {
+        const connectionResult = await this.connect();
+        if (connectionResult.isError)
+            return connectionResult;
         try {
             await this.userRepository.update(user.id, user);
             return new types_1.Right(null);
@@ -86,6 +113,9 @@ let InternalUserDatasource = class InternalUserDatasource {
         }
     }
     async remove(userId) {
+        const connectionResult = await this.connect();
+        if (connectionResult.isError)
+            return connectionResult;
         try {
             const user = await this.userRepository.findOneBy({ id: userId });
             if (!user)
@@ -105,6 +135,7 @@ InternalUserDatasource = __decorate([
     (0, injectable_1.default)('IInternalUserDatasource'),
     __param(0, (0, inversify_1.inject)('Repository<User>')),
     __param(1, (0, inversify_1.inject)('ILoggerService')),
-    __metadata("design:paramtypes", [typeorm_1.Repository, Object])
+    __param(2, (0, inversify_1.inject)('initDB')),
+    __metadata("design:paramtypes", [typeorm_1.Repository, Object, Function])
 ], InternalUserDatasource);
 exports.default = InternalUserDatasource;

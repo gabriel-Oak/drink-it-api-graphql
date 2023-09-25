@@ -7,13 +7,13 @@ const path_1 = __importDefault(require("path"));
 const server_1 = require("@apollo/server");
 const type_graphql_1 = require("type-graphql");
 const auth_middleware_1 = __importDefault(require("./utils/middlewares/auth-middleware"));
-const datatabase_service_1 = require("./utils/services/datatabase-service");
+// import { initDB } from './utils/services/datatabase-service';
 const container_1 = __importDefault(require("./utils/decorators/container"));
 const resolvers_1 = __importDefault(require("./resolvers"));
 async function createServer(emitSchemaFile = false) {
     const container = (0, container_1.default)();
     const logger = container.get('ILoggerService');
-    await (0, datatabase_service_1.initDB)();
+    // await initDB();
     logger.info(`Building schema emitSchemaFile: ${emitSchemaFile}`);
     const schema = await (0, type_graphql_1.buildSchema)({
         resolvers: resolvers_1.default,
