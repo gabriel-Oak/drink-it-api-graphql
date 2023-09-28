@@ -1,0 +1,1 @@
+import './get-by-name';

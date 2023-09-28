@@ -15,4 +15,5 @@ export interface IInternalCocktailDatasource {
     Either<InternalCocktailDatasourceError, Cocktail[]>
   >;
   findRandom: () => Promise<Either<InternalCocktailDatasourceError, Cocktail | null>>;
+  findByName: (name: string) => Promise<Either<InternalCocktailDatasourceError, Cocktail[]>>;
 }

@@ -115,7 +115,7 @@ describe('InternalCocktailDatasource Tests', () => {
     expect(result).toBeInstanceOf(Left);
   });
 
-  it('Should find may cocktails', async () => {
+  it('Should find many cocktails', async () => {
     cocktailRepositoryMock.find.mockImplementation(async () => [cocktailMock]);
     const result = await datasource.findMany(['7382']);
 
@@ -149,6 +149,29 @@ describe('InternalCocktailDatasource Tests', () => {
   it('Should deal with finding random errors', async () => {
     queryBuilder.getOne.mockRejectedValue(Error('Crap you to beaultiful for this'));
     const result = await datasource.findRandom();
+
+    expect(result).toBeInstanceOf(Left);
+    expect((result as Left<unknown>).error).toBeInstanceOf(InternalCocktailDatasourceError);
+  });
+
+  it('Should error connection on find by name cocktails', async () => {
+    initDBMock.mockImplementation(async () => false);
+    const result = await datasource.findByName('margerita');
+
+    expect(result).toBeInstanceOf(Left);
+  });
+
+  it('Should find by name cocktails', async () => {
+    cocktailRepositoryMock.find.mockImplementation(async () => [cocktailMock]);
+    const result = await datasource.findByName('margerita');
+
+    expect(result).toBeInstanceOf(Right);
+    expect((result as Right<unknown>).success).toBeInstanceOf(Array<Cocktail>);
+  });
+
+  it('Should deal with finding by name errors', async () => {
+    cocktailRepositoryMock.find.mockRejectedValue(Error('Crap you to beaultiful for this'));
+    const result = await datasource.findByName('margerita');
 
     expect(result).toBeInstanceOf(Left);
     expect((result as Left<unknown>).error).toBeInstanceOf(InternalCocktailDatasourceError);

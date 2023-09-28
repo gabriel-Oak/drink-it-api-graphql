@@ -86,7 +86,7 @@ let InternalCocktailDatasource = class InternalCocktailDatasource {
             return new types_1.Right(cocktail);
         }
         catch (e) {
-            const error = new types_2.InternalCocktailDatasourceError(e.message ?? 'Someting went search cocktail', {
+            const error = new types_2.InternalCocktailDatasourceError(e.message ?? 'Someting went wrong while search cocktail', {
                 error: e,
                 cocktailId,
             });
@@ -108,7 +108,7 @@ let InternalCocktailDatasource = class InternalCocktailDatasource {
             return new types_1.Right(cocktails);
         }
         catch (e) {
-            const error = new types_2.InternalCocktailDatasourceError(e.message ?? 'Someting went search cocktail', {
+            const error = new types_2.InternalCocktailDatasourceError(e.message ?? 'Someting went wrong while search cocktail', {
                 error: e,
                 cocktailsIds,
             });
@@ -131,8 +131,30 @@ let InternalCocktailDatasource = class InternalCocktailDatasource {
             return new types_1.Right(cocktail);
         }
         catch (e) {
-            const error = new types_2.InternalCocktailDatasourceError(e.message ?? 'Someting went search cocktail', {
+            const error = new types_2.InternalCocktailDatasourceError(e.message ?? 'Someting went wrong while searching cocktail', {
                 error: e,
+            });
+            this.logger.error(error.message, error);
+            return new types_1.Left(error);
+        }
+    }
+    async findByName(name) {
+        const connectionResult = await this.connect();
+        if (connectionResult.isError)
+            return connectionResult;
+        try {
+            const cocktails = await this.cocktailRepository.find({
+                where: {
+                    name: (0, typeorm_1.Like)(name),
+                },
+                relations: ['measures', 'measures.ingredient'],
+            });
+            return new types_1.Right(cocktails);
+        }
+        catch (e) {
+            const error = new types_2.InternalCocktailDatasourceError(e.message ?? 'Someting went wrong while searching cocktails', {
+                error: e,
+                name,
             });
             this.logger.error(error.message, error);
             return new types_1.Left(error);
