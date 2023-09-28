@@ -74,4 +74,21 @@ describe('CocktailExternalDatasouce Tests', () => {
     expect((result as Left<unknown>).error)
       .toBeInstanceOf(CocktailDatasourceError);
   });
+
+  it('Should get cocktail list by name', async () => {
+    httpServiceMock.get.mockImplementation(async () => cocktailDetailMock);
+    const result = await datasource.getCocktailsByName('margerita');
+
+    expect(result).toBeInstanceOf(Right);
+    expect((result as Right<Cocktail[]>).success[0]).toBeInstanceOf(Cocktail);
+  });
+
+  it('Should handle source api error for list  by name', async () => {
+    httpServiceMock.get.mockRejectedValue(Error('Opps, service offline'));
+    const result = await datasource.getCocktailsByName('margerita');
+
+    expect(result).toBeInstanceOf(Left);
+    expect((result as Left<unknown>).error)
+      .toBeInstanceOf(CocktailDatasourceError);
+  });
 });

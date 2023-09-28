@@ -19,4 +19,5 @@ export interface ICocktailExternalDatasource {
     cocktailId: string
   ) => Promise<Either<CocktailDatasourceError, Cocktail | null>>;
   getRamdomCocktail: () => Promise<Either<CocktailDatasourceError, Cocktail>>;
+  getCocktailsByName: (s: string) => Promise<Either<CocktailDatasourceError, Cocktail[] | null>>;
 }

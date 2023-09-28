@@ -70,4 +70,25 @@ export default class CocktailExternalDatasource implements ICocktailExternalData
       return new Left(error);
     }
   }
+
+  async getCocktailsByName(s: string) {
+    try {
+      const result = await this.httpService.get<GetCocktailDetailsResponse>(`${COCKTAIL_API}/search.php`, {
+        params: { query: { s } },
+      });
+
+      return new Right(
+        result.drinks
+          ? result.drinks.map(Cocktail.fromSource)
+          : null,
+      );
+    } catch (e) {
+      const error = new CocktailDatasourceError(
+        'Something went wrong consulting cocktails service',
+        { error: e, s },
+      );
+      this.logger.error(error.message, error);
+      return new Left(error);
+    }
+  }
 }

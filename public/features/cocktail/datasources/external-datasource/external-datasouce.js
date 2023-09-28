@@ -65,6 +65,21 @@ let CocktailExternalDatasource = class CocktailExternalDatasource {
             return new types_1.Left(error);
         }
     }
+    async getCocktailsByName(s) {
+        try {
+            const result = await this.httpService.get(`${constants_1.COCKTAIL_API}/search.php`, {
+                params: { query: { s } },
+            });
+            return new types_1.Right(result.drinks
+                ? result.drinks.map(cocktail_1.default.fromSource)
+                : null);
+        }
+        catch (e) {
+            const error = new types_2.CocktailDatasourceError('Something went wrong consulting cocktails service', { error: e, s });
+            this.logger.error(error.message, error);
+            return new types_1.Left(error);
+        }
+    }
 };
 CocktailExternalDatasource = __decorate([
     (0, injectable_1.default)('ICocktailExternalDatasource'),
