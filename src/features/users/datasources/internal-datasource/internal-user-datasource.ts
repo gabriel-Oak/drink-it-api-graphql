@@ -27,7 +27,7 @@ export default class InternalUserDatasource implements IInternalUserDatasource {
     const initialized = await new Promise<boolean>((r) => {
       setTimeout(() => {
         this.initDB().then(r);
-      }, 3000);
+      }, tries ? +(process.env.CONNECTION_TIMEOUT || 3000) : 0);
     });
     return initialized ? new Right(null) : this.connect(tries + 1);
   }

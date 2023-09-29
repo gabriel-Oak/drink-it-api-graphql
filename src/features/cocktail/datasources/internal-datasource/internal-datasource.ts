@@ -31,7 +31,7 @@ export default class InternalCocktailDatasource implements IInternalCocktailData
     const initialized = await new Promise<boolean>((r) => {
       setTimeout(() => {
         this.initDB().then(r);
-      }, tries ? 3000 : 0);
+      }, tries ? +(process.env.CONNECTION_TIMEOUT || 3000) : 0);
     });
     return initialized ? new Right(null) : this.connect(tries + 1);
   }
