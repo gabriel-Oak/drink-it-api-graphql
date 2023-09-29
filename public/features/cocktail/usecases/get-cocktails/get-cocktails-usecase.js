@@ -29,7 +29,7 @@ let GetCocktailsUsecase = class GetCocktailsUsecase {
     }
     async saveCocktails(cocktails) {
         for (const cocktail of cocktails) {
-            await this.internalDatasource.saveOne(cocktail);
+            await this.internalDatasource.saveOne(cocktail).catch();
         }
     }
     async getDetails(cocktails) {

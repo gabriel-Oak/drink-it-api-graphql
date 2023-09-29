@@ -22,10 +22,11 @@ const cocktail_1 = __importDefault(require("../../entities/cocktail"));
 const types_1 = require("./types");
 const http_error_1 = __importDefault(require("../../../../utils/errors/http-error"));
 let CocktailResolver = class CocktailResolver {
-    constructor(getCocktailsUsecase, getDetailUsecase, getRandomUsecase) {
+    constructor(getCocktailsUsecase, getDetailUsecase, getRandomUsecase, getByNameUsecase) {
         this.getCocktailsUsecase = getCocktailsUsecase;
         this.getDetailUsecase = getDetailUsecase;
         this.getRandomUsecase = getRandomUsecase;
+        this.getByNameUsecase = getByNameUsecase;
     }
     async getCocktails(query) {
         if (!query || !Object.values(query).some(Boolean)) {
@@ -54,6 +55,12 @@ let CocktailResolver = class CocktailResolver {
             return result.success;
         return new http_error_1.default(result.error);
     }
+    async getCocktailsByName(cocktailName) {
+        const result = await this.getByNameUsecase.execute(cocktailName);
+        if (result.isSuccess)
+            return result.success;
+        return new http_error_1.default(result.error);
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [cocktail_1.default]),
@@ -75,11 +82,19 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], CocktailResolver.prototype, "getRandomCocktail", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [cocktail_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('name')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], CocktailResolver.prototype, "getCocktailsByName", null);
 CocktailResolver = __decorate([
     (0, resolver_1.default)(),
     __param(0, (0, inversify_1.inject)('IGetCocktailsUsecase')),
     __param(1, (0, inversify_1.inject)('IGetDetailsUsecase')),
     __param(2, (0, inversify_1.inject)('IGetRandomUsecase')),
-    __metadata("design:paramtypes", [Object, Object, Object])
+    __param(3, (0, inversify_1.inject)('IGetByNameUsecase')),
+    __metadata("design:paramtypes", [Object, Object, Object, Object])
 ], CocktailResolver);
 exports.default = CocktailResolver;

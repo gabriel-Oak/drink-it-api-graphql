@@ -8,6 +8,7 @@ import HttpError from '../../../../utils/errors/http-error';
 import { getCocktailsQuery } from '../../entities/get-cocktails';
 import { IGetDetailsUsecase } from '../../usecases/get-details/type';
 import { IGetRandomUsecase } from '../../usecases/get-random/types';
+import { IGetByNameUsecase } from '../../usecases/get-by-name/types';
 
 @Resolver()
 export default class CocktailResolver implements ICocktailResolver {
@@ -18,6 +19,8 @@ export default class CocktailResolver implements ICocktailResolver {
     private readonly getDetailUsecase: IGetDetailsUsecase,
     @inject('IGetRandomUsecase')
     private readonly getRandomUsecase: IGetRandomUsecase,
+    @inject('IGetByNameUsecase')
+    private readonly getByNameUsecase: IGetByNameUsecase,
   ) { }
 
   @Query(() => [Cocktail])
@@ -49,6 +52,14 @@ export default class CocktailResolver implements ICocktailResolver {
   @Query(() => Cocktail)
   async getRandomCocktail() {
     const result = await this.getRandomUsecase.execute();
+    if (result.isSuccess) return result.success;
+
+    return new HttpError(result.error);
+  }
+
+  @Query(() => [Cocktail])
+  async getCocktailsByName(@Arg('name') cocktailName: string) {
+    const result = await this.getByNameUsecase.execute(cocktailName);
     if (result.isSuccess) return result.success;
 
     return new HttpError(result.error);

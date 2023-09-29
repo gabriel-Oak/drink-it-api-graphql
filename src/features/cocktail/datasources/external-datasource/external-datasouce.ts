@@ -74,7 +74,7 @@ export default class CocktailExternalDatasource implements ICocktailExternalData
   async getCocktailsByName(s: string) {
     try {
       const result = await this.httpService.get<GetCocktailDetailsResponse>(`${COCKTAIL_API}/search.php`, {
-        params: { query: { s } },
+        params: { s },
       });
 
       return new Right(

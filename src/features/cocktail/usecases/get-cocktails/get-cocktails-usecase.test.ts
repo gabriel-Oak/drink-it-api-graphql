@@ -26,6 +26,7 @@ describe('GetCocktailsUsecase Tests', () => {
     mockReset(internalDatasourceMock);
     mockReset(cacheServiceMock);
     cacheServiceMock.get.mockImplementation(async () => null);
+    internalDatasourceMock.saveOne.mockImplementation(async () => new Right(null));
   });
 
   it('Should get full cocktails list', async () => {

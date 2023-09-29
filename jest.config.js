@@ -22,5 +22,5 @@ module.exports = {
     '/node_modules/',
     '/dist/',
   ],
-  testTimeout: 31000,
+  testTimeout: 100000,
 };

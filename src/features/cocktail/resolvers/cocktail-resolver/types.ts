@@ -33,4 +33,5 @@ export default interface ICocktailResolver {
   getCocktails: (query: CocktailQuery) => Promise<HttpError | Cocktail[]>;
   getCocktailDetail: (cocktailId: string) => Promise<HttpError | Cocktail>;
   getRandomCocktail: () => Promise<HttpError | Cocktail>;
+  getCocktailsByName: (cocktailName: string) => Promise<HttpError | Cocktail[]>;
 }

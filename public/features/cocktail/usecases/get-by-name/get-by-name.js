@@ -24,14 +24,17 @@ let GetByNameUsecase = class GetByNameUsecase {
     }
     async execute(name) {
         const externalCocktails = await this.externalDatasource.getCocktailsByName(name);
-        if (externalCocktails.isSuccess && externalCocktails.success) {
-            externalCocktails.success.forEach((c) => {
-                this.internalDatasource.saveOne(c).catch();
-            });
+        if (externalCocktails.isSuccess && externalCocktails.success?.length) {
+            this.save(externalCocktails.success);
             return externalCocktails;
         }
         const internallCocktails = await this.internalDatasource.findByName(name);
         return internallCocktails;
+    }
+    async save(cocktails) {
+        for (const cocktail of cocktails) {
+            await this.internalDatasource.saveOne(cocktail).catch();
+        }
     }
 };
 GetByNameUsecase = __decorate([

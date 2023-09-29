@@ -25,7 +25,7 @@ export default class GetCocktailsUsecase implements IGetCocktailsUsecase {
 
   async saveCocktails(cocktails: Cocktail[]) {
     for (const cocktail of cocktails) {
-      await this.internalDatasource.saveOne(cocktail);
+      await this.internalDatasource.saveOne(cocktail).catch();
     }
   }
 

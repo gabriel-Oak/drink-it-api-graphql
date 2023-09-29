@@ -36,7 +36,7 @@ let InternalCocktailDatasource = class InternalCocktailDatasource {
         const initialized = await new Promise((r) => {
             setTimeout(() => {
                 this.initDB().then(r);
-            }, 3000);
+            }, tries ? 3000 : 0);
         });
         return initialized ? new types_1.Right(null) : this.connect(tries + 1);
     }

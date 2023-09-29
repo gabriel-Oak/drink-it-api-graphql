@@ -17,14 +17,18 @@ export default class GetByNameUsecase implements IGetByNameUsecase {
 
   async execute(name: string) {
     const externalCocktails = await this.externalDatasource.getCocktailsByName(name);
-    if (externalCocktails.isSuccess && externalCocktails.success) {
-      externalCocktails.success.forEach((c) => {
-        this.internalDatasource.saveOne(c).catch();
-      });
+    if (externalCocktails.isSuccess && externalCocktails.success?.length) {
+      this.save(externalCocktails.success);
       return externalCocktails as Right<Cocktail[]>;
     }
 
     const internallCocktails = await this.internalDatasource.findByName(name);
     return internallCocktails;
+  }
+
+  private async save(cocktails: Cocktail[]) {
+    for (const cocktail of cocktails) {
+      await this.internalDatasource.saveOne(cocktail).catch();
+    }
   }
 }

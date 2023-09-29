@@ -68,7 +68,7 @@ let CocktailExternalDatasource = class CocktailExternalDatasource {
     async getCocktailsByName(s) {
         try {
             const result = await this.httpService.get(`${constants_1.COCKTAIL_API}/search.php`, {
-                params: { query: { s } },
+                params: { s },
             });
             return new types_1.Right(result.drinks
                 ? result.drinks.map(cocktail_1.default.fromSource)

@@ -11,15 +11,19 @@ import { CocktailDatasourceError } from '../../datasources/external-datasource/t
 import '../../entities/measure';
 import { GetDetailsValidationError, IGetDetailsUsecase } from '../../usecases/get-details/type';
 import { IGetRandomUsecase, RandomNotFoundError } from '../../usecases/get-random/types';
+import { IGetByNameUsecase } from '../../usecases/get-by-name/types';
+import { InternalCocktailDatasourceError } from '../../datasources/internal-datasource/types';
 
 describe('CocktailResolver Tests', () => {
   const getCocktailsMock = mock<IGetCocktailsUsecase>();
   const getDetailsMock = mock<IGetDetailsUsecase>();
   const getRandomMock = mock<IGetRandomUsecase>();
+  const getByNameMock = mock<IGetByNameUsecase>();
   const resolver: ICocktailResolver = new CocktailResolver(
     getCocktailsMock,
     getDetailsMock,
     getRandomMock,
+    getByNameMock,
   );
   const successMock = [Cocktail.fromSource(cocktailDetailMock as any)];
 
@@ -27,6 +31,7 @@ describe('CocktailResolver Tests', () => {
     mockReset(getCocktailsMock);
     mockReset(getDetailsMock);
     mockReset(getRandomMock);
+    mockReset(getByNameMock);
   });
 
   it('Should return cocktails', async () => {
@@ -100,6 +105,25 @@ describe('CocktailResolver Tests', () => {
     expect(result).toEqual(new HttpError({
       statusCode: 500,
       message: 'Sorry, couldn\'t find you a random cocktail now',
+    }));
+  });
+
+  it('Should return cocktails by name', async () => {
+    getByNameMock.execute
+      .mockImplementation(async () => new Right([Cocktail.fromSource(cocktailDetailMock as any)]));
+    const result = await resolver.getCocktailsByName('margerita');
+
+    expect(result).toEqual([Cocktail.fromSource(cocktailDetailMock as any)]);
+  });
+
+  it('Should return cocktails by name', async () => {
+    getByNameMock.execute
+      .mockImplementation(async () => new Left(new InternalCocktailDatasourceError('ooopos')));
+    const result = await resolver.getCocktailsByName('margerita');
+
+    expect(result).toEqual(new HttpError({
+      statusCode: 500,
+      message: 'ooopos',
     }));
   });
 });
