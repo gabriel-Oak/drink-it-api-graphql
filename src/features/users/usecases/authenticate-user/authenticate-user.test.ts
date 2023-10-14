@@ -21,7 +21,6 @@ describe('AuthenticateUserUsecase Tests', () => {
   const userMock = new User({
     ...payloadMock,
     name: 'Jhon Doe',
-    username: 'jhon123',
   });
 
   beforeAll(async () => {

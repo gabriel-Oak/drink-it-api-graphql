@@ -12,8 +12,6 @@ export class UserResponse implements Omit<UserProps, 'password'> {
 
   @Field() email!: string;
 
-  @Field() username!: string;
-
   constructor(props: Omit<UserProps, 'password'>) {
     Object.assign(this, {
       ...props,
@@ -39,8 +37,6 @@ export class NewUser implements Omit<UserProps, 'id'> {
 
   @Field() email!: string;
 
-  @Field() username!: string;
-
   @Field() password!: string;
 }
 
@@ -51,9 +47,6 @@ export class UpdateUser implements Partial<Omit<UserProps, 'id' | 'password'>> {
 
   @Field({ nullable: true })
   public email?: string;
-
-  @Field({ nullable: true })
-  public username?: string;
 }
 
 export default interface IUserResolver {

@@ -12,7 +12,6 @@ describe('InsertUserUsecase Tests', () => {
     email: 'hellomyboy@gmail.com',
     name: 'Jhon Doe',
     password: '123ohmygod',
-    username: 'jhon123',
   };
 
   beforeEach(() => {

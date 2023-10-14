@@ -12,7 +12,6 @@ export interface UserProps {
   id?: string;
   name: string;
   email: string;
-  username: string;
   password?: string;
 }
 
@@ -36,10 +35,6 @@ export default class User {
     unique: true,
   })
   public email!: string;
-
-  @Field()
-  @Column('text')
-  public username!: string;
 
   @Field()
   @Column({
@@ -72,7 +67,6 @@ export default class User {
     return {
       id: this.id,
       name: this.name,
-      username: this.username,
       email: this.email,
     };
   }
@@ -80,7 +74,6 @@ export default class User {
   updateProps(props: Partial<Omit<UserProps, 'id'>>) {
     Object.assign(this, {
       name: props.name ?? this.name,
-      username: props.username ?? this.username,
       email: props.email ?? this.email,
     });
   }

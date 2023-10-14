@@ -10,7 +10,6 @@ export default class ValidateUserUsecase implements IValidateUserUsecase {
     try {
       const userSchema = z.object({
         name: z.string().min(3).max(250),
-        username: z.string().min(3).max(250).regex(/([a-zA-Z\d])\w+/),
         email: z.string().email(),
         password: z.string().min(6).max(20),
       });

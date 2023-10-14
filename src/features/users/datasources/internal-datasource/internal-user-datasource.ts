@@ -49,20 +49,19 @@ export default class InternalUserDatasource implements IInternalUserDatasource {
     }
   }
 
-  async findByEmailOrUsername(query: { username: string; email: string; }) {
+  async findByEmailOrUsername(query: { email: string; }) {
     const connectionResult = await this.connect();
     if (connectionResult.isError) return connectionResult;
 
     try {
       const user = await this.userRepository.findOneBy([
         { email: query.email },
-        { username: query.username },
       ]);
       delete user?.password;
       return new Right(user);
     } catch (e) {
       const error = new InternalUserDatasourceError(
-        (e as IError).message || `Oops, sorry got an error searching for ${query.email} ${query.username}`,
+        (e as IError).message || `Oops, sorry got an error searching for ${query.email}`,
         { ...(e as IError), query },
       );
       this.logger.error(error.message, error);

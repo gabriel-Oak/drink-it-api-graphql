@@ -67,7 +67,6 @@ input NewUser {
   email: String!
   name: String!
   password: String!
-  username: String!
 }
 
 type Query {
@@ -83,12 +82,10 @@ type Query {
 input UpdateUser {
   email: String
   name: String
-  username: String
 }
 
 type UserResponse {
   email: String!
   id: String!
   name: String!
-  username: String!
 }

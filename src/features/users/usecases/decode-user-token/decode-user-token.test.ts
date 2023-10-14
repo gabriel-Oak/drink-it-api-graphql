@@ -11,7 +11,7 @@ describe('DecodeUserTokenUsecase Test', () => {
   const userDatasourceMock = mock<IInternalUserDatasource>();
   const usecase: IDecodeUserTokenUsecase = new DecodeUserTokenDatasource(userDatasourceMock);
   const token = sign({
-    email: '', id: '', name: '', username: '',
+    email: '', id: '', name: '',
   }, JWT_SECRET);
 
   beforeEach(() => {

@@ -54,7 +54,6 @@ describe('InternalUserDatasource Tests', () => {
     repositoryMock.findOneBy.mockImplementation(async () => userMock);
     const result = await datasource.findByEmailOrUsername({
       email: 'hireme@gmail.com',
-      username: 'toninhodogas',
     });
 
     expect(result).toBeInstanceOf(Right);
@@ -65,7 +64,6 @@ describe('InternalUserDatasource Tests', () => {
     repositoryMock.findOneBy.mockRejectedValue(Error('HOLLY CHEAT'));
     const result = await datasource.findByEmailOrUsername({
       email: 'hireme@gmail.com',
-      username: 'toninhodogas',
     });
 
     expect(result).toBeInstanceOf(Left);

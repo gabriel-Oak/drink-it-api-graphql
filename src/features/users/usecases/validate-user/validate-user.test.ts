@@ -9,7 +9,6 @@ describe('ValidadeUserUsecase tests', () => {
     email: 'hellomyboy@gmail.com',
     name: 'Jhon Doe',
     password: '123ohmygod',
-    username: 'jhon123',
   };
 
   it('Should pass validations', () => {
@@ -19,11 +18,6 @@ describe('ValidadeUserUsecase tests', () => {
 
   it('Should fail email', () => {
     const result = usecase.execute({ ...payloadMock, email: 'test' });
-    expect(result).toBeInstanceOf(Left);
-  });
-
-  it('Should fail username', () => {
-    const result = usecase.execute({ ...payloadMock, username: '' });
     expect(result).toBeInstanceOf(Left);
   });
 

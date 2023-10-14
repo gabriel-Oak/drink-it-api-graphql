@@ -17,7 +17,6 @@ describe('SignUserUsecase Tests', () => {
       email: 'olha@gmail.com',
       name: 'Hello World',
       password: 'oyuweyfyewf7yisdfiuhsdf',
-      username: 'hellow',
       id: '8sd98fysd89f',
     }));
 

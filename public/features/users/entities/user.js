@@ -34,14 +34,12 @@ let User = class User {
         return {
             id: this.id,
             name: this.name,
-            username: this.username,
             email: this.email,
         };
     }
     updateProps(props) {
         Object.assign(this, {
             name: props.name ?? this.name,
-            username: props.username ?? this.username,
             email: props.email ?? this.email,
         });
     }
@@ -67,11 +65,6 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    (0, typeorm_1.Column)('text'),
-    __metadata("design:type", String)
-], User.prototype, "username", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
     (0, typeorm_1.Column)({

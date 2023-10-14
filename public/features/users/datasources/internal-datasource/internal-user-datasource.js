@@ -58,13 +58,12 @@ let InternalUserDatasource = class InternalUserDatasource {
         try {
             const user = await this.userRepository.findOneBy([
                 { email: query.email },
-                { username: query.username },
             ]);
             delete user?.password;
             return new types_1.Right(user);
         }
         catch (e) {
-            const error = new types_2.InternalUserDatasourceError(e.message || `Oops, sorry got an error searching for ${query.email} ${query.username}`, { ...e, query });
+            const error = new types_2.InternalUserDatasourceError(e.message || `Oops, sorry got an error searching for ${query.email}`, { ...e, query });
             this.logger.error(error.message, error);
             return new types_1.Left(error);
         }

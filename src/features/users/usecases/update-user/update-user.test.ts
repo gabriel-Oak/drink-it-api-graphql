@@ -11,7 +11,6 @@ describe('UpdateUserUsecase Tests', () => {
     id: 'string',
     name: 'string',
     email: 'string',
-    username: null as unknown as string,
   };
   const datasourceMock = mock<IInternalUserDatasource>();
   const usecase: IUpdateUserUsecase = new UpdateUserUsecase(datasourceMock);

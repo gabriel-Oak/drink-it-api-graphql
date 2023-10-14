@@ -32,10 +32,6 @@ __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
 ], UserResponse.prototype, "email", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], UserResponse.prototype, "username", void 0);
 exports.UserResponse = UserResponse = __decorate([
     (0, type_graphql_1.ObjectType)(),
     __metadata("design:paramtypes", [Object])
@@ -72,10 +68,6 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], NewUser.prototype, "username", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
 ], NewUser.prototype, "password", void 0);
 exports.NewUser = NewUser = __decorate([
     (0, type_graphql_1.InputType)()
@@ -91,10 +83,6 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], UpdateUser.prototype, "email", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], UpdateUser.prototype, "username", void 0);
 exports.UpdateUser = UpdateUser = __decorate([
     (0, type_graphql_1.InputType)()
 ], UpdateUser);

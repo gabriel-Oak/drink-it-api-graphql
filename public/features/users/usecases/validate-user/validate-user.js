@@ -18,7 +18,6 @@ let ValidateUserUsecase = class ValidateUserUsecase {
         try {
             const userSchema = zod_1.z.object({
                 name: zod_1.z.string().min(3).max(250),
-                username: zod_1.z.string().min(3).max(250).regex(/([a-zA-Z\d])\w+/),
                 email: zod_1.z.string().email(),
                 password: zod_1.z.string().min(6).max(20),
             });
